@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Form definitions</title>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <!--
+      Netlify's build bot discovers forms by parsing the deployed HTML. The React
+      form on /contact is a controlled component that submits via fetch, so this
+      plain declaration is what actually registers the form and its fields.
+
+      Every `name` here must match the payload the React form sends, or the
+      submission is accepted and then silently dropped as a field mismatch.
+
+      After the first deploy: Netlify dashboard → Forms → contact → Settings and
+      usage → "Form notifications" → Add notification → Email notification, and
+      point it at shahbaz.wasim@hotmail.com.
+    -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="text" name="projectType" />
+      <input type="text" name="budget" />
+      <input type="text" name="timeline" />
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

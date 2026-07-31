@@ -1,0 +1,93 @@
+/**
+ * Post-build step: derive sitemap.xml and robots.txt from what was actually
+ * emitted into dist/, so a new route can never be missing from the sitemap.
+ *
+ *   node scripts/postbuild.mjs
+ */
+import { readdir, readFile, writeFile, stat } from 'node:fs/promises'
+import path from 'node:path'
+
+const DIST = 'dist'
+
+// Read the canonical origin from the app's own config rather than duplicating it.
+const siteSource = await readFile('src/data/site.ts', 'utf8')
+const ORIGIN = (siteSource.match(/url:\s*'([^']+)'/)?.[1] ?? 'https://example.com').replace(/\/$/, '')
+
+/** Routes that should never be indexed. */
+const EXCLUDE = new Set(['/404', '/__forms'])
+
+/** Rough importance ranking — home first, then top-level, then detail pages. */
+function priorityFor(route) {
+  if (route === '/') return '1.0'
+  if (['/work', '/ai', '/demos', '/services', '/skills', '/about', '/contact'].includes(route))
+    return '0.9'
+  if (route === '/blog' || route === '/resume') return '0.8'
+  if (route.startsWith('/work/') || route.startsWith('/demos/')) return '0.7'
+  if (route.startsWith('/blog/')) return '0.6'
+  return '0.5'
+}
+
+function changefreqFor(route) {
+  if (route === '/' || route === '/blog') return 'weekly'
+  if (route.startsWith('/blog/')) return 'yearly'
+  return 'monthly'
+}
+
+async function walk(dir, acc = []) {
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) await walk(full, acc)
+    else if (entry.name.endsWith('.html')) acc.push(full)
+  }
+  return acc
+}
+
+const files = await walk(DIST)
+
+const routes = files
+  .map((f) => {
+    const rel = path.relative(DIST, f).replace(/\\/g, '/')
+    const route = '/' + rel.replace(/index\.html$/, '').replace(/\.html$/, '')
+    return route === '/index' ? '/' : route.replace(/\/$/, '') || '/'
+  })
+  .filter((r) => !EXCLUDE.has(r))
+  .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)))
+
+const lastmod = (await stat(path.join(DIST, 'index.html'))).mtime.toISOString().slice(0, 10)
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes
+  .map(
+    (r) => `  <url>
+    <loc>${ORIGIN}${r === '/' ? '/' : r}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreqFor(r)}</changefreq>
+    <priority>${priorityFor(r)}</priority>
+  </url>`
+  )
+  .join('\n')}
+</urlset>
+`
+
+const robots = `# ${ORIGIN}
+User-agent: *
+Allow: /
+Disallow: /__forms.html
+
+Sitemap: ${ORIGIN}/sitemap.xml
+`
+
+await writeFile(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8')
+await writeFile(path.join(DIST, 'robots.txt'), robots, 'utf8')
+
+console.log(`sitemap.xml — ${routes.length} routes`)
+console.log(`robots.txt  — sitemap points at ${ORIGIN}/sitemap.xml`)
+
+if (ORIGIN.includes('netlify.app')) {
+  console.log(
+    `\n  Note: SITE.url in src/data/site.ts is still ${ORIGIN}.\n` +
+      `  Update it after pointing a custom domain at the site — canonical URLs,\n` +
+      `  OG tags, JSON-LD and this sitemap all derive from it.`
+  )
+}

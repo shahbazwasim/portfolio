@@ -1,0 +1,14 @@
+{
+  "name": "Shahbaz Wasim — Full Stack & AI Engineer",
+  "short_name": "Shahbaz Wasim",
+  "description": "Portfolio of Shahbaz Wasim — AI systems, custom CRMs, e-commerce platforms and data engineering.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07080C",
+  "theme_color": "#07080C",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
