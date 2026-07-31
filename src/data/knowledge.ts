@@ -41,16 +41,16 @@ export const KNOWLEDGE: Chunk[] = [
   {
     id: 'experience-current',
     section: 'Experience → Current',
-    title: 'Current role at Habl Tech',
-    text: 'Since August 2023 Shahbaz has been a Full Stack Developer at Habl Tech Company. He builds scalable web applications with ReactJS, Node.js and Magento, integrates AI-driven features and CRM solutions, designs Power BI reporting that improved business insight turnaround by around 30%, implements security practices that cut vulnerabilities by roughly 20%, and mentors junior developers.',
-    keywords: ['current job', 'habl', 'now', 'present', 'employer', 'work'],
+    title: 'Current role at EdTech Ventures',
+    text: 'Since August 2023 Shahbaz has been a Senior Full Stack Engineer at EdTech Ventures, working remotely. He leads AI-first product engineering: designing and shipping LLM-backed features end to end, including retrieval pipelines, prompt design, grounding checks and evaluation harnesses. He owns the full stack underneath in React, TypeScript, Node and Python over PostgreSQL, manages AI cost and latency through prompt caching and model routing, designed Power BI reporting that improved business insight turnaround by around 30%, and mentors the junior engineers on the team.',
+    keywords: ['current job', 'edtech ventures', 'edtech', 'now', 'present', 'employer', 'work'],
   },
   {
     id: 'experience-history',
     section: 'Experience → History',
     title: 'Career history',
-    text: 'Shahbaz started freelancing in 2015 building WordPress and PHP sites for small businesses. From February 2017 to July 2021 he was a Software Engineer at Techsol IT, where he built responsive applications in JavaScript, PHP and MySQL, improved application performance by about 30% through query optimisation, and introduced automated testing that reduced bugs by around 25%. From 2021 to 2023 he worked as an independent consultant for startups and agencies across e-commerce, SaaS and data. He joined Habl Tech in August 2023.',
-    keywords: ['history', 'career', 'previous', 'techsol', 'freelance', 'consulting', 'years', 'experience', 'timeline'],
+    text: 'Shahbaz started freelancing in 2015 building WordPress and PHP sites for small businesses. From February 2017 to July 2021 he was a Software Engineer at Techsol IT, where he built responsive applications in JavaScript, PHP and MySQL, improved application performance by about 30% through query optimisation, and introduced automated testing that reduced bugs by around 25%. From August 2021 to July 2023 he was a Full Stack Developer at Right Solution, a software house, delivering Shopify and Magento builds, custom CRM tooling and headless CMS migrations for clients. He joined EdTech Ventures as a Senior Full Stack Engineer in August 2023.',
+    keywords: ['history', 'career', 'previous', 'techsol', 'right solution', 'agency', 'freelance', 'years', 'experience', 'timeline'],
   },
   {
     id: 'ai-expertise',
