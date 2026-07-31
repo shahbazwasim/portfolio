@@ -47,7 +47,7 @@ const SEED: Invoice = {
   from: {
     name: 'Shahbaz Wasim',
     email: 'shahbaz.wasim01@gmail.com',
-    address: 'Karachi, Pakistan',
+    address: 'Remote · Worldwide',
   },
   to: {
     name: 'Helio Group Ltd',

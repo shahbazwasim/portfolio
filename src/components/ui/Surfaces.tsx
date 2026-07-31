@@ -40,29 +40,40 @@ export function GlassCard({
       onMouseMove={onMove}
       onMouseLeave={() => setPos(null)}
       className={cn(
-        'glass rounded-card relative overflow-hidden',
+        // `isolate` scopes the decorative layers' negative z-index to this card.
+        'glass rounded-card relative isolate overflow-hidden',
         interactive &&
           'transition-[transform,box-shadow,border-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] hover:border-line-strong',
         className
       )}
       {...rest}
     >
+      {/* Both decorations are position:absolute, so they are out of flow and do
+          NOT become grid/flex items — that's what lets `className` carry a real
+          layout (e.g. `grid lg:grid-cols-[7rem_1fr_1fr]`) that applies to the
+          caller's own children.
+
+          They sit at -z-10 rather than inside a wrapper div: negative z-index
+          children paint after the parent's background but before its in-flow
+          content, so the card's contents still render on top. An earlier version
+          wrapped children in a `relative` div for that stacking, which silently
+          collapsed every caller's layout into a single grid cell. */}
       {ring && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[inherit] p-px [background:linear-gradient(135deg,color-mix(in_oklab,var(--accent-cyan)_50%,transparent),color-mix(in_oklab,var(--accent-violet)_40%,transparent)_45%,transparent_75%)] [mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)] [mask-composite:exclude] opacity-40"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] p-px [background:linear-gradient(135deg,color-mix(in_oklab,var(--accent-cyan)_50%,transparent),color-mix(in_oklab,var(--accent-violet)_40%,transparent)_45%,transparent_75%)] [mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)] [mask-composite:exclude] opacity-40"
         />
       )}
       {spotlight && pos && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] transition-opacity duration-300"
           style={{
             background: `radial-gradient(340px circle at ${pos.x}px ${pos.y}px, color-mix(in oklab, var(--accent-violet) 16%, transparent), transparent 65%)`,
           }}
         />
       )}
-      <div className="relative">{children}</div>
+      {children}
     </div>
   )
 }

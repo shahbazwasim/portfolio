@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Seo
-        description={`${SITE.name} — ${SITE.role} in ${SITE.location}. ${SITE.yearsExperience}+ years building AI systems, custom CRMs, e-commerce platforms and data pipelines. Available for hire worldwide.`}
+        description={`${SITE.name} — ${SITE.role} working remotely with clients worldwide. ${SITE.yearsExperience}+ years building AI systems, custom CRMs, e-commerce platforms and data pipelines. Available for hire.`}
         path="/"
         keywords={[
           'full stack developer',
@@ -27,7 +27,8 @@ export default function Home() {
           'WordPress developer',
           'Power BI developer',
           'hire full stack developer',
-          'Karachi Pakistan developer',
+          'remote full stack developer',
+          'freelance AI developer',
         ]}
         jsonLd={personJsonLd()}
       />

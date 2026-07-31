@@ -88,7 +88,7 @@ export default function About() {
     <>
       <Seo
         title="About"
-        description={`${SITE.name} is a ${SITE.role} based in ${SITE.location} with ${SITE.yearsExperience}+ years of experience. MSc in Artificial Intelligence, BSc in Computer Science. Open to relocation worldwide.`}
+        description={`${SITE.name} is a ${SITE.role} with ${SITE.yearsExperience}+ years of experience, working remotely with clients worldwide. MSc in Artificial Intelligence, BSc in Computer Science. Open to relocation.`}
         path="/about"
         type="profile"
         jsonLd={breadcrumbJsonLd([
@@ -117,7 +117,7 @@ export default function About() {
             <Reveal delay={0.08}>
               <div className="text-muted mt-8 flex max-w-2xl flex-col gap-5 text-base leading-relaxed sm:text-lg">
                 <p>
-                  I started making WordPress sites for shops around Karachi while I was still
+                  I started out making WordPress sites for small local businesses while I was still
                   finishing my Computer Science degree. The work was unglamorous and it taught me
                   the thing no course did: software is only useful if the person paying for it can
                   actually run their business with it.

@@ -17,7 +17,12 @@ export const SITE = {
   tagline: 'I build AI-powered products, CRMs and commerce platforms that ship.',
   bio: 'Full stack engineer with 10+ years building scalable web applications, AI-driven products and custom CRM platforms for teams across four continents.',
 
-  location: 'Karachi, Pakistan',
+  /**
+   * Deliberately not a city. The positioning is "works worldwide", so nothing
+   * user-facing pins a country to the profile. The timezone stays because it is
+   * practically useful when someone is trying to book a call.
+   */
+  location: 'Remote · Worldwide',
   timezone: 'PKT (UTC+5)',
   yearsExperience: 10,
   projectsDelivered: 120,

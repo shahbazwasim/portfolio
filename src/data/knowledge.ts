@@ -21,14 +21,14 @@ export const KNOWLEDGE: Chunk[] = [
     id: 'identity',
     section: 'About → Identity',
     title: 'Who Shahbaz is',
-    text: 'Shahbaz Wasim is a Full Stack and AI Engineer based in Karachi, Pakistan, with over 10 years of experience building software since 2015. He holds an MSc in Artificial Intelligence from Iqra University and a BSc in Computer Science from DHA Suffa University. He works across AI systems, custom CRM platforms, e-commerce and data engineering.',
+    text: 'Shahbaz Wasim is a Full Stack and AI Engineer with over 10 years of experience building software since 2015, working remotely with clients worldwide. He holds an MSc in Artificial Intelligence from Iqra University and a BSc in Computer Science from DHA Suffa University. He works across AI systems, custom CRM platforms, e-commerce and data engineering.',
     keywords: ['who', 'about', 'introduction', 'name', 'background', 'bio', 'summary'],
   },
   {
     id: 'availability',
     section: 'About → Availability',
     title: 'Availability and relocation',
-    text: 'Shahbaz is currently available for new projects and open to full-time roles, contract work and consulting. He is open to relocating worldwide for the right opportunity, and equally happy working fully remote. He is based in Karachi (PKT, UTC+5) and usually replies to enquiries within 24 hours.',
+    text: 'Shahbaz is currently available for new projects and open to full-time roles, contract work and consulting. He works remotely with clients worldwide and is open to relocating internationally for the right opportunity. He operates on PKT (UTC+5) but is flexible on hours for other timezones, and usually replies to enquiries within 24 hours.',
     keywords: ['available', 'hire', 'hiring', 'relocate', 'relocation', 'remote', 'full-time', 'contract', 'freelance', 'visa', 'timezone'],
   },
   {
@@ -42,14 +42,14 @@ export const KNOWLEDGE: Chunk[] = [
     id: 'experience-current',
     section: 'Experience → Current',
     title: 'Current role at Habl Tech',
-    text: 'Since August 2023 Shahbaz has been a Full Stack Developer at Habl Tech Company in Karachi. He builds scalable web applications with ReactJS, Node.js and Magento, integrates AI-driven features and CRM solutions, designs Power BI reporting that improved business insight turnaround by around 30%, implements security practices that cut vulnerabilities by roughly 20%, and mentors junior developers.',
+    text: 'Since August 2023 Shahbaz has been a Full Stack Developer at Habl Tech Company. He builds scalable web applications with ReactJS, Node.js and Magento, integrates AI-driven features and CRM solutions, designs Power BI reporting that improved business insight turnaround by around 30%, implements security practices that cut vulnerabilities by roughly 20%, and mentors junior developers.',
     keywords: ['current job', 'habl', 'now', 'present', 'employer', 'work'],
   },
   {
     id: 'experience-history',
     section: 'Experience → History',
     title: 'Career history',
-    text: 'Shahbaz started freelancing in 2015 building WordPress and PHP sites for small businesses in Karachi. From February 2017 to July 2021 he was a Software Engineer at Techsol IT, where he built responsive applications in JavaScript, PHP and MySQL, improved application performance by about 30% through query optimisation, and introduced automated testing that reduced bugs by around 25%. From 2021 to 2023 he worked as an independent consultant for startups and agencies across e-commerce, SaaS and data. He joined Habl Tech in August 2023.',
+    text: 'Shahbaz started freelancing in 2015 building WordPress and PHP sites for small businesses. From February 2017 to July 2021 he was a Software Engineer at Techsol IT, where he built responsive applications in JavaScript, PHP and MySQL, improved application performance by about 30% through query optimisation, and introduced automated testing that reduced bugs by around 25%. From 2021 to 2023 he worked as an independent consultant for startups and agencies across e-commerce, SaaS and data. He joined Habl Tech in August 2023.',
     keywords: ['history', 'career', 'previous', 'techsol', 'freelance', 'consulting', 'years', 'experience', 'timeline'],
   },
   {
@@ -147,7 +147,7 @@ export const KNOWLEDGE: Chunk[] = [
     id: 'education',
     section: 'Education',
     title: 'Education',
-    text: 'Shahbaz holds an MSc in Artificial Intelligence from Iqra University, Karachi, covering machine learning, natural language processing, computer vision and applied deep learning. He also holds a BSc in Computer Science from DHA Suffa University, Karachi. He has additionally completed CS101 Computer Science at Stanford and CS50 Understanding Technology at Harvard.',
+    text: 'Shahbaz holds an MSc in Artificial Intelligence from Iqra University, covering machine learning, natural language processing, computer vision and applied deep learning. He also holds a BSc in Computer Science from DHA Suffa University. He has additionally completed CS101 Computer Science at Stanford and CS50 Understanding Technology at Harvard.',
     keywords: ['education', 'degree', 'university', 'msc', 'bsc', 'masters', 'bachelors', 'study', 'qualification', 'iqra', 'dha suffa'],
   },
   {

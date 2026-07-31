@@ -84,10 +84,11 @@ export function personJsonLd() {
         image: `${SITE.url}/images/profile-hero.png`,
         email: `mailto:${SITE.email}`,
         telephone: SITE.phone,
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Karachi',
-          addressCountry: 'PK',
+        // No postal address on purpose — the profile is positioned as working
+        // worldwide, so nothing here should tie it to one locality.
+        workLocation: {
+          '@type': 'Place',
+          name: 'Remote — worldwide',
         },
         alumniOf: [
           { '@type': 'CollegeOrUniversity', name: 'Iqra University' },

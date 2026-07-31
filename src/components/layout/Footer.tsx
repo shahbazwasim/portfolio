@@ -86,7 +86,7 @@ export function Footer() {
       <div className="border-line border-t">
         <div className="container-page flex flex-col items-center justify-between gap-5 py-6 sm:flex-row">
           <p className="text-subtle text-center text-xs sm:text-left">
-            © {year} {SITE.name}. Built with React, Vite &amp; Tailwind.
+            © {year} {SITE.name}. All rights reserved.
           </p>
           <ul className="flex items-center gap-1">
             {SOCIALS.map((s) => (
