@@ -18,7 +18,12 @@
       usage → "Form notifications" → Add notification → Email notification, and
       point it at shahbaz.wasim@hotmail.com.
     -->
-    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <!--
+      Deliberately NOT using the `hidden` attribute: Netlify's parser can skip
+      hidden forms, and `method="POST"` is required for detection. This page is
+      noindex and linked from nowhere, so there is nothing to hide it from.
+    -->
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="contact" />
       <input type="text" name="bot-field" />
       <input type="text" name="name" />
@@ -28,6 +33,7 @@
       <input type="text" name="budget" />
       <input type="text" name="timeline" />
       <textarea name="message"></textarea>
+      <button type="submit">Send</button>
     </form>
   </body>
 </html>
