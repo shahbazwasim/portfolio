@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, Check, ChevronDown, Copy, Lightbulb, MapPin } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, Copy, Lightbulb } from 'lucide-react'
 import { Seo } from '@/lib/seo'
 import { getProject } from '@/data/projects'
 import {
@@ -151,11 +151,17 @@ function ConceptCard({ slug, title, note }: { slug: string; title: string; note:
  * PUBLISHED_ISLANDS, so the page never shows a code that doesn't open.
  */
 export default function Uefn() {
+  const hasIslands = PUBLISHED_ISLANDS.length > 0
+
   return (
     <>
       <Seo
         title="UEFN portfolio"
-        description="Published Fortnite islands with their island codes, and Verse concept builds for game systems."
+        description={
+          hasIslands
+            ? 'Published Fortnite islands with their island codes, and Verse concept builds for game systems.'
+            : 'Verse concept builds for Fortnite game systems: a ranked round engine, an AI director, a tycoon save schema and a physics puzzle controller.'
+        }
         path="/uefn"
         noIndex
       />
@@ -168,12 +174,12 @@ export default function Uefn() {
           <h1 className="mt-5 max-w-4xl text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02]">
             UEFN portfolio.
             <br />
-            <span className="text-gradient">Islands and Verse.</span>
+            <span className="text-gradient">{hasIslands ? 'Islands and Verse.' : 'Verse game systems.'}</span>
           </h1>
           <p className="text-muted mt-7 max-w-2xl text-lg leading-relaxed">
-            Published islands come first, each with its island code — open any of them in Fortnite.
-            Below them are Verse concept builds: working code for game systems, not yet published
-            as islands.
+            {hasIslands
+              ? 'Published islands come first, each with its island code — open any of them in Fortnite. Below them are Verse concept builds: working code for game systems, not yet published as islands.'
+              : 'Game systems for Fortnite islands, written in Verse: a ranked round engine, an AI director, a tycoon save schema and a physics puzzle-room controller.'}
           </p>
           {CREATOR_PROFILE && (
             <a
@@ -205,14 +211,14 @@ export default function Uefn() {
       </section>
 
       {/* ------------------------------------------------ published islands */}
-      <section className="container-page pb-16">
-        <Reveal>
-          <h2 className="text-subtle mb-6 font-mono text-xs tracking-[0.2em] uppercase">
-            Published islands
-          </h2>
-        </Reveal>
-
-        {PUBLISHED_ISLANDS.length > 0 ? (
+      {/* Rendered only once PUBLISHED_ISLANDS has a real entry — no placeholder. */}
+      {hasIslands && (
+        <section className="container-page pb-16">
+          <Reveal>
+            <h2 className="text-subtle mb-6 font-mono text-xs tracking-[0.2em] uppercase">
+              Published islands
+            </h2>
+          </Reveal>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {PUBLISHED_ISLANDS.map((island, i) => (
               <Reveal key={island.code} delay={Math.min(i * 0.05, 0.2)} className="min-w-0">
@@ -220,19 +226,8 @@ export default function Uefn() {
               </Reveal>
             ))}
           </div>
-        ) : (
-          <Reveal>
-            <div className="border-line rounded-panel flex flex-col items-center border border-dashed px-6 py-14 text-center">
-              <MapPin size={22} className="text-cyan" aria-hidden="true" />
-              <p className="text-ink mt-4 font-medium">Published islands will appear here</p>
-              <p className="text-muted mt-2 max-w-md text-sm leading-relaxed">
-                Each one will be listed with its island code, in-game screenshots and a link to
-                its public player stats.
-              </p>
-            </div>
-          </Reveal>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* ------------------------------------------------- concept builds */}
       <section className="container-page border-line border-t pt-16 pb-24">
