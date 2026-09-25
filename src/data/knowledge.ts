@@ -21,7 +21,7 @@ export const KNOWLEDGE: Chunk[] = [
     id: 'identity',
     section: 'About → Identity',
     title: 'Who Shahbaz is',
-    text: 'Shahbaz Wasim is a Full Stack and AI Engineer with over 10 years of experience building software since 2015, working remotely with clients worldwide. He holds an MSc in Artificial Intelligence from Iqra University and a BSc in Computer Science from DHA Suffa University. He works across AI systems, custom CRM platforms, e-commerce and data engineering.',
+    text: 'Shahbaz Wasim is a Full Stack and AI Engineer with over 10 years of experience building software since 2015, working remotely with clients worldwide. He holds an MSc in Artificial Intelligence from Iqra University and a BSc in Computer Science from DHA Suffa University. He works across AI systems, custom CRM platforms, e-commerce, data engineering and Fortnite game development in UEFN.',
     keywords: ['who', 'about', 'introduction', 'name', 'background', 'bio', 'summary'],
   },
   {
@@ -123,6 +123,27 @@ export const KNOWLEDGE: Chunk[] = [
     keywords: ['mobile', 'react native', 'ios', 'android', 'app', 'flutter', 'expo', 'offline'],
   },
   {
+    id: 'open-source-dbt',
+    section: 'Projects → Open source',
+    title: 'Open-source dbt analytics project',
+    text: 'Shahbaz built an open-source analytics engineering project: a dbt and DuckDB pipeline over the public UCI Online Retail II dataset, 1,067,371 real transactions from a UK online retailer between 2009 and 2011. It lands the raw data with checksum verification, cleans it in a staging layer (including 34,335 duplicate lines from overlapping worksheets), and models orders, customers, RFM segments, cohort retention and product performance, covered by 206 data tests. It computes £18.93M in net revenue after returns and shows the top customer segment brings in 52% of revenue. Its exports drive the live Stockroom dashboard on this site.',
+    keywords: ['dbt', 'duckdb', 'open source', 'github', 'analytics engineering', 'data engineering', 'data pipeline', 'sql', 'warehouse', 'stockroom', 'cohort', 'rfm', 'retail'],
+  },
+  {
+    id: 'uefn',
+    section: 'Skills → Game development',
+    title: 'UEFN and Fortnite island development',
+    text: 'Shahbaz has built Fortnite islands in UEFN, Unreal Editor for Fortnite, writing the game systems in Verse. His UEFN work includes a ranked box-fight arena for Tidebreak with a Glicko-style skill rating kept in Verse persistence and in-lobby matchmaking, which took average session length from 11 to 34 minutes; an AI director for Nightjar that paces a co-op horde game from real-time squad stress instead of fourteen hand-tuned wave tables; a tycoon for Pinegrove whose economy was simulated in Python before launch, with a versioned save schema that has shipped six updates without a progress wipe; and a physics curriculum for Orrery rebuilt as twelve puzzle rooms with an in-session classroom mode.',
+    keywords: ['uefn', 'fortnite', 'verse', 'unreal', 'unreal engine', 'unreal editor', 'game', 'games', 'gaming', 'game development', 'gamedev', 'game dev', 'island', 'islands', 'creative', 'epic games', 'tycoon', 'arena', 'map', 'maps', 'ai director', 'npc', 'npcs', 'matchmaking', 'rating', 'education', 'learning'],
+  },
+  {
+    id: 'uefn-approach',
+    section: 'Game development → Approach',
+    title: 'How Shahbaz approaches UEFN and Verse',
+    text: 'Shahbaz brings production engineering discipline to Fortnite islands. Game flow is written as explicit Verse state machines using structured concurrency such as race, rather than tangles of device wiring. Persistent player data is treated as a versioned schema with forward-only migrations, so updates never wipe progress. Devices are discovered by gameplay tag so layouts can change without rewiring. Economies and difficulty curves are modelled and simulated in Python before they are built, and analytics events at every milestone check the model against live play.',
+    keywords: ['approach', 'persistence', 'save data', 'saves', 'concurrency', 'state machine', 'devices', 'game design', 'balancing', 'economy', 'simulation', 'methodology'],
+  },
+  {
     id: 'services',
     section: 'Services',
     title: 'What Shahbaz offers',
@@ -140,7 +161,7 @@ export const KNOWLEDGE: Chunk[] = [
     id: 'demos',
     section: 'Demos',
     title: 'The live demos on this site',
-    text: 'Six working applications are built into this site: NexusCRM (drag-and-drop sales pipeline), Aria (this assistant, with a RAG pipeline inspector), PulseBI (cross-filtering analytics dashboard), Lumina (storefront with cart and checkout), Quill (block-based CMS) and Invoicely (invoice builder with real client-side PDF export). All state persists to your browser and nothing is sent to a server.',
+    text: 'Seven working applications are built into this site: NexusCRM (drag-and-drop sales pipeline), Aria (this assistant, with a RAG pipeline inspector), PulseBI (cross-filtering analytics dashboard), Lumina (storefront with cart and checkout), Quill (block-based CMS), Invoicely (invoice builder with real client-side PDF export) and Stockroom (a dashboard over a real dbt warehouse of 1,067,371 retail transactions). All state persists to your browser and nothing is sent to a server.',
     keywords: ['demo', 'demos', 'try', 'live', 'interactive', 'playground', 'examples', 'nexuscrm', 'pulsebi', 'invoicely', 'lumina'],
   },
   {
@@ -179,6 +200,7 @@ export const SUGGESTED_QUESTIONS = [
   'Have you built CRM systems before?',
   'Are you available for hire?',
   'What e-commerce platforms do you work with?',
+  'Have you built anything in UEFN or Verse?',
   'How do you approach a new project?',
   'What did you study?',
 ] as const

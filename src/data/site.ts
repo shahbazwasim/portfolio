@@ -13,6 +13,7 @@ export const SITE = {
     'CRM Architect',
     'E-Commerce Specialist',
     'Data & BI Developer',
+    'UEFN & Verse Developer',
   ],
   tagline: 'I build AI-powered products, CRMs and commerce platforms that ship.',
   bio: 'Full stack engineer with 10+ years building scalable web applications, AI-driven products and custom CRM platforms for teams across four continents.',

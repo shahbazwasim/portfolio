@@ -8,6 +8,7 @@ import {
   Code,
   Compass,
   Database,
+  Gamepad2,
   Gauge,
   LayoutGrid,
   Lightbulb,
@@ -69,6 +70,7 @@ const ICONS = {
   rocket: Rocket,
   lightbulb: Lightbulb,
   wrench: Wrench,
+  gamepad: Gamepad2,
 } as const
 
 export type IconName = keyof typeof ICONS

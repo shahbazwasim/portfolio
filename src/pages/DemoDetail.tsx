@@ -6,6 +6,7 @@ import { Seo, breadcrumbJsonLd } from '@/lib/seo'
 import { ACCENT_CLASS, DEMOS, getDemo } from '@/data/demos'
 import { getProject } from '@/data/projects'
 import { Icon } from '@/components/ui/Icon'
+import { SocialIcon } from '@/components/ui/SocialIcon'
 import { Reveal } from '@/components/ui/Reveal'
 import { GlassCard } from '@/components/ui/Surfaces'
 
@@ -24,6 +25,7 @@ const DEMO_COMPONENTS: Record<string, React.LazyExoticComponent<React.ComponentT
   'lumina-commerce': lazy(() => import('@/demos/lumina-commerce')),
   'quill-cms': lazy(() => import('@/demos/quill-cms')),
   invoicely: lazy(() => import('@/demos/invoicely')),
+  stockroom: lazy(() => import('@/demos/stockroom')),
 }
 
 function Loading({ name }: { name: string }) {
@@ -92,13 +94,26 @@ export default function DemoDetail() {
 
           {project && (
             <Reveal delay={0.06}>
-              <Link
-                to={`/work/${project.slug}`}
-                className="border-line text-muted hover:text-ink hover:border-line-strong group inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors"
-              >
-                Read the {project.client} case study
-                <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-              </Link>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  to={`/work/${project.slug}`}
+                  className="border-line text-muted hover:text-ink hover:border-line-strong group inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors"
+                >
+                  Read the {project.client} case study
+                  <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                {project.repo && (
+                  <a
+                    href={project.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-line text-muted hover:text-ink hover:border-line-strong inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors"
+                  >
+                    <SocialIcon name="github" size={15} />
+                    Source on GitHub
+                  </a>
+                )}
+              </div>
             </Reveal>
           )}
         </div>

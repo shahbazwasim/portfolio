@@ -16,8 +16,40 @@ export type ProjectCategory =
   | 'Mobile'
   | 'DevOps & Cloud'
   | 'Design Systems'
+  | 'UEFN & Games'
+
+/**
+ * Which generated illustration to draw when a screenshot has no real image.
+ * Defaults to the category's art, so most entries never set it — it exists for
+ * projects whose views differ in kind, like a game's map, HUD and source code.
+ */
+export type ProjectArt =
+  | 'kanban'
+  | 'dashboard'
+  | 'commerce'
+  | 'ai'
+  | 'pipeline'
+  | 'mobile'
+  | 'system'
+  | 'editor'
+  | 'island'
+  | 'heatmap'
+  | 'trail'
+  | 'plots'
+  | 'hud'
+  | 'puzzle'
+  | 'verse'
 
 export type Metric = { label: string; value: string }
+
+/** A short excerpt of real source, rendered with syntax highlighting. */
+export type CodeExcerpt = {
+  file: string
+  language: 'verse'
+  /** One sentence on why this excerpt is the interesting part. */
+  caption: string
+  source: string
+}
 
 export type Project = {
   slug: string
@@ -40,7 +72,10 @@ export type Project = {
   outcome: string
   /** Links the case study to a runnable demo in /demos. */
   demoSlug?: string
-  screenshots: { caption: string; src?: string }[]
+  screenshots: { caption: string; src?: string; art?: ProjectArt }[]
+  code?: CodeExcerpt
+  /** Public source repository, linked from the case study and its demo. */
+  repo?: string
 }
 
 export const PROJECTS: Project[] = [
@@ -958,6 +993,520 @@ export const PROJECTS: Project[] = [
       { caption: 'Visual regression diff in CI' },
     ],
   },
+
+  /* ------------------------------------------------------------------ 15 */
+  {
+    slug: 'tidebreak-ranked-arena',
+    title: 'Ranked box fights with a skill rating built in Verse',
+    client: 'Tidebreak',
+    clientDescriptor: 'Esports organisation',
+    year: 2025,
+    duration: '4 months',
+    role: 'Lead UEFN & Verse Engineer',
+    category: 'UEFN & Games',
+    summary:
+      'Competitive 1v1–4v4 Fortnite island with a persistent skill rating, in-lobby matchmaking and a round engine that treats disconnects as outcomes, not crashes.',
+    featured: true,
+    tech: ['UEFN', 'Verse', 'Verse Persistence', 'Creative Devices', 'Unreal Engine 5', 'Python'],
+    metrics: [
+      { label: 'Session length', value: '11 → 34 min' },
+      { label: 'Lopsided matches', value: '−68%' },
+      { label: 'Frozen rounds', value: '0' },
+    ],
+    challenge:
+      'Tidebreak\'s community scrimmed on a public box-fight map assembled from stock devices. It paired anyone with anyone, so newcomers were farmed by pros and both left within minutes. Standings lived in a Discord bot fed by screenshots. When a player disconnected mid-round the match simply froze — and the island forgot everyone the moment they left.',
+    approach: [
+      {
+        title: 'Modelled the round as a state machine, not device wiring',
+        detail:
+          'Warm-up, live, overtime and results became explicit Verse states. Every way a live round can end — a team wipe, a leaver, the clock — is one branch of a single race, so a disconnect is an outcome with defined rules rather than an edge case that hangs the match.',
+      },
+      {
+        title: 'Put a real rating system inside the island',
+        detail:
+          'A Glicko-style rating with a deviation term, stored per player in Verse persistence. New players converge within about a dozen matches, and deviation widens again after time away, so a returning player is not seeded against the rank they left with.',
+      },
+      {
+        title: 'Matched on skill with the players actually present',
+        detail:
+          'An island cannot choose who lands on its server, so pairing happens in-lobby: queue pads feed a Verse matcher that pairs the closest ratings present and widens its tolerance the longer someone waits. Nobody sits out waiting for a perfect match.',
+      },
+      {
+        title: 'Tuned the ruleset against outcome data',
+        detail:
+          'Analytics devices only count how often they fire, so every outcome-and-rating-band pair got its own device — the device layout is the schema. Build-material caps, overtime length and storm timings were then tuned against the lower-rated player\'s win rate: upsets stay possible without skill ceasing to matter.',
+      },
+    ],
+    architecture: [
+      { layer: 'Round engine', detail: 'Verse state machine for warm-up, live, overtime and results; race-based resolution of wipes, leavers and timeouts' },
+      { layer: 'Rating', detail: 'Glicko-style rating and deviation per player in a persistable weak_map, versioned for safe schema changes' },
+      { layer: 'Devices', detail: 'Spawn pads, barriers, item granters and mutator zones discovered by gameplay tag — no hand-wired references' },
+      { layer: 'Presentation', detail: 'Verse-driven HUD for rating, streak and round state, with every string localisable' },
+    ],
+    highlights: [
+      'A mid-round disconnect resolves as a forfeit immediately, instead of freezing the match',
+      'Seasonal soft resets land lazily as each player next joins — an island can only reach the saves of players in the session',
+      'Anti-boosting: the same two players paired again and again in one lobby stop moving each other\'s rating',
+      'Devices found by tag, so a new arena variant is a duplicate-and-retheme job, not a rewire',
+      'An unranked scrim mode runs Tidebreak\'s team practice through the same engine',
+    ],
+    outcome:
+      'Average session length rose from 11 to 34 minutes as matches got closer, and lopsided games fell 68%. Tidebreak moved its weekly community scrims onto the island and retired the screenshot-fed Discord bot — ratings now live where the matches happen.',
+    screenshots: [
+      { caption: 'Arena layout with storm phases and spawn pads', art: 'island' },
+      { caption: 'Ranked HUD — round state, score and rating change', art: 'hud' },
+      { caption: 'Round engine in Verse', art: 'verse' },
+    ],
+    code: {
+      file: 'arena_round.verse',
+      language: 'verse',
+      caption:
+        'The core of the round engine. Three ways a live round can end, expressed as one race — whichever finishes first decides the outcome and the other two are cancelled.',
+      source: `using { /Fortnite.com/Characters }
+using { /Fortnite.com/Game }
+using { /Verse.org/Simulation }
+
+round_end := enum:
+    TeamWiped
+    Forfeit
+    TimeExpired
+
+# One live round. Every way a round can end is a branch of the race,
+# so a leaver is an outcome with rules, never a frozen match.
+arena_round := class:
+    Teams : []arena_team
+    RoundSeconds : float
+    WipeEvent : event() = event(){}
+    LeaverEvent : event(player) = event(player){}
+
+    RunLive()<suspends> : round_end =
+        Watchers := for (Fighter : Fighters()):
+            Fighter.EliminatedEvent().Subscribe(OnEliminated)
+        # However the race resolves, no subscription outlives the round.
+        defer:
+            for (Watcher : Watchers):
+                Watcher.Cancel()
+        race:
+            block:
+                WipeEvent.Await()
+                round_end.TeamWiped
+            block:
+                LeaverEvent.Await()
+                round_end.Forfeit
+            block:
+                Sleep(RoundSeconds)
+                round_end.TimeExpired
+
+    OnEliminated(Result : elimination_result) : void =
+        Victim := Result.EliminatedCharacter
+        if (Team := TeamOf[Victim], not Team.HasSurvivor[]):
+            WipeEvent.Signal()`,
+    },
+  },
+
+  /* ------------------------------------------------------------------ 16 */
+  {
+    slug: 'nightjar-ai-director',
+    title: 'An AI director that reads the squad and paces the horde',
+    client: 'Nightjar',
+    clientDescriptor: 'UEFN studio, co-op PvE',
+    year: 2026,
+    duration: '6 months',
+    role: 'Gameplay AI Engineer',
+    category: 'UEFN & Games',
+    summary:
+      'Co-op survival island where a Verse director reads squad stress in real time and shapes spawns, pacing and relief — replacing fourteen hand-tuned wave tables.',
+    featured: true,
+    tech: ['UEFN', 'Verse', 'NPC Behaviors', 'Creative Devices', 'Unreal Engine 5', 'Python'],
+    metrics: [
+      { label: 'Runs per session', value: '1.4 → 3.1' },
+      { label: 'Early-wave quits', value: '−52%' },
+      { label: 'Hand-tuned wave tables', value: '14 → 0' },
+    ],
+    challenge:
+      'Nightjar\'s co-op survival island ran on fourteen hand-tuned wave tables. Strong squads were bored by wave six; new squads were wiped by wave three and never came back. Every balance pass meant editing every table, and the difficulty still could not tell a squad that was cruising from one that was a single bad fight away from a wipe.',
+    approach: [
+      {
+        title: 'Replaced the wave tables with a director',
+        detail:
+          'A Verse director samples the squad twice a second — health, shields, spacing, recent damage taken, kill rate — and folds it into one smoothed stress value. Spawning follows stress, not a script.',
+      },
+      {
+        title: 'Paced every run as build-up, peak and relief',
+        detail:
+          'The loop cycles through build-up, peak and a guaranteed relief window, the pattern that made the classic co-op shooters feel authored. After a peak nothing spawns until stress has genuinely fallen — which is what makes the next peak land.',
+      },
+      {
+        title: 'Gave enemies roles, not just bigger health bars',
+        detail:
+          'Custom NPC behaviours in Verse for three archetypes — rushers, flankers that path toward the most isolated player, and anchors that hold ground — so the director composes encounters instead of only turning up the count.',
+      },
+      {
+        title: 'Tuned the feedback loop in simulation first',
+        detail:
+          'A Python model of the director was swept across simulated squads of different skill before any playtest. It caught oscillation — waves that spike, over-correct and spike again — that would have taken weeks of playtesting to find.',
+      },
+    ],
+    architecture: [
+      { layer: 'Sensing', detail: 'Per-squad sampling of health, shields, spacing and incoming damage, smoothed into a single stress signal' },
+      { layer: 'Director', detail: 'Verse pacing state machine — build-up, peak, relief — with a spawn budget driven by stress and run time' },
+      { layer: 'Agents', detail: 'Verse NPC behaviours for rushers, flankers and anchors, spawned at director-chosen points' },
+      { layer: 'Tuning', detail: 'Python + NumPy simulation of the feedback loop, swept across squad skill profiles before playtest' },
+    ],
+    highlights: [
+      'Spawn points scored against where the squad is looking, so enemies never pop into view',
+      'A guaranteed relief window after every peak — two peaks are never stacked back to back',
+      'Flankers read the squad\'s spread and path toward whoever has drifted furthest from the group',
+      'Difficulty presets are just different stress targets: one director, three modes',
+      'A hard cap on live enemies keeps even the biggest peak inside the server\'s NPC budget',
+    ],
+    outcome:
+      'Squads now play 3.1 runs per session, up from 1.4, and early-wave quits fell 52%. The fourteen wave tables are gone: a balance pass is a change to a few director parameters, simulated first and playtested second.',
+    screenshots: [
+      { caption: 'Spawn pressure against the squad\'s hold point', art: 'heatmap' },
+      { caption: 'Stress signal across a run — build-up, peak, relief', art: 'dashboard' },
+      { caption: 'Director pacing loop in Verse', art: 'verse' },
+    ],
+    code: {
+      file: 'director.verse',
+      language: 'verse',
+      caption:
+        'The pacing loop. Stress is smoothed before it is acted on, and relief is a state the director has to earn its way out of — not a timer.',
+      source: `using { /Verse.org/Simulation }
+
+pacing := enum:
+    BuildUp
+    Peak
+    Relief
+
+# Replaces fourteen hand-tuned wave tables. The director never scripts
+# what spawns next, only how much pressure the squad can take right now.
+director := class:
+    Squad : squad_sensor
+    Spawner : spawn_planner
+    PeakAt : float = 0.7
+    Ceiling : float = 0.9
+    RecoveredAt : float = 0.3
+    PeakSeconds : float = 25.0
+    var Stress : float = 0.0
+    var Phase : pacing = pacing.BuildUp
+    var PeakStarted : float = 0.0
+
+    Run()<suspends> : void =
+        loop:
+            # Smoothed, so one bad fight is not mistaken for a trend.
+            set Stress += 0.2 * (Squad.SampleStress() - Stress)
+            Tick()
+            Sleep(0.5)
+
+    Tick()<transacts> : void =
+        if (Phase = pacing.BuildUp):
+            Spawner.Spend(Lerp(0.4, 1.4, Stress))
+            if (Stress >= PeakAt):
+                set Phase = pacing.Peak
+                set PeakStarted = GetSimulationElapsedTime()
+        else if (Phase = pacing.Peak):
+            Spawner.Spend(1.8)
+            if (Stress >= Ceiling or PeakExpired[]):
+                set Phase = pacing.Relief
+        else:
+            # Relief is non-negotiable: nothing spawns until the squad
+            # has genuinely recovered.
+            if (Stress <= RecoveredAt):
+                set Phase = pacing.BuildUp
+
+    PeakExpired()<transacts><decides> : void =
+        GetSimulationElapsedTime() - PeakStarted > PeakSeconds`,
+    },
+  },
+
+  /* ------------------------------------------------------------------ 17 */
+  {
+    slug: 'pinegrove-tycoon',
+    title: 'A tycoon economy balanced in simulation before launch',
+    client: 'Pinegrove',
+    clientDescriptor: 'Independent UEFN studio',
+    year: 2024,
+    duration: '5 months',
+    role: 'Verse & Systems Engineer',
+    category: 'UEFN & Games',
+    summary:
+      'Persistent tycoon island with rebirths and a versioned save schema, its economy curves modelled and stress-tested in Python before a device was placed.',
+    featured: false,
+    tech: ['UEFN', 'Verse', 'Verse Persistence', 'Creative Devices', 'Python'],
+    metrics: [
+      { label: 'Day-7 retention', value: '2.4×' },
+      { label: 'Model vs live pacing', value: '±8%' },
+      { label: 'Progress wipes', value: '0' },
+    ],
+    challenge:
+      'Pinegrove\'s first tycoon peaked in its opening week and collapsed. Income compounded faster than costs, so engaged players maxed out in two days with nothing left to do. Then an update needed a different save shape, and the only route the original code allowed was a fresh save map — orphaning everyone\'s progress. The studio wanted a follow-up that could run for months and be updated without that ever happening again.',
+    approach: [
+      {
+        title: 'Modelled the economy before building it',
+        detail:
+          'Income, upgrade costs and rebirth multipliers were built as a Python model first, then run against simulated cohorts — casual, engaged and min-maxing — to hit agreed pacing targets: a first rebirth in about 45 minutes, and weeks of content for the most dedicated players rather than days.',
+      },
+      {
+        title: 'Treated save data as a schema with migrations',
+        detail:
+          'Each player\'s save is a versioned persistable Verse class. Verse already refuses to publish a change that removes, renames or retypes a field; the version number and forward migrations cover what the compiler cannot check — what a field means. Every load walks the save forward from whichever version the player last saw.',
+      },
+      {
+        title: 'Generated the tuning, never hand-edited it',
+        detail:
+          'The model exports the cost and income tables the island ships with. A balance change is a model change and a regenerate — no constants tweaked by hand in Verse, and no drift between what was simulated and what went live.',
+      },
+      {
+        title: 'Checked the model against live play',
+        detail:
+          'Analytics devices at each milestone — first rebirth, every tier unlock — plus the Creator Portal\'s retention and session-length data were compared against the simulation weekly. Where live pacing drifted, the curve was retuned in the model first and shipped second.',
+      },
+    ],
+    architecture: [
+      { layer: 'Economy model', detail: 'Python + NumPy simulation of income, cost and rebirth curves across player archetypes' },
+      { layer: 'Persistence', detail: 'Versioned persistable class per player, forward-only migrations on load, write-through on every purchase' },
+      { layer: 'Gameplay', detail: 'Verse plot and upgrade system driving tagged buttons, vending machines, barriers and prop movers' },
+      { layer: 'Telemetry', detail: 'Analytics devices at progression milestones plus Creator Portal retention, reconciled against the model weekly' },
+    ],
+    highlights: [
+      'Six content updates shipped since launch without a single player losing progress',
+      'Rebirth multipliers on a soft curve, so late-game growth slows instead of exploding',
+      'Purchases write through to persistence immediately — a disconnect never loses a paid upgrade',
+      'Six building tiers share one modular mesh kit, keeping the island well inside UEFN\'s 100,000-unit memory budget',
+      'Returning players skip onboarding automatically — the migration knows who is new',
+    ],
+    outcome:
+      'Day-7 retention came in at 2.4× the studio\'s previous tycoon, and live pacing tracked the simulation to within 8%. Six content updates have shipped without a single progress wipe — the failure that sank the first game.',
+    screenshots: [
+      { caption: 'Plot grid with building tiers and upgrades in progress', art: 'plots' },
+      { caption: 'Economy model — income and cost curves by tier', art: 'dashboard' },
+      { caption: 'Versioned save schema in Verse', art: 'verse' },
+    ],
+    code: {
+      file: 'tycoon_save.verse',
+      language: 'verse',
+      caption:
+        'Persistent saves as a versioned schema. New fields arrive with defaults, and every load walks the save forward one version at a time — so an update can never meet a save it does not understand.',
+      source: `using { /Verse.org/Simulation }
+
+# A player's save is a schema, not a blob. Fields are only ever
+# appended with defaults, and every load migrates forward from the
+# version the player last saw.
+tycoon_save := class<final><persistable>:
+    Version : int = 1
+    Cash : int = 0
+    Rebirths : int = 0
+    PlotTiers : []int = array{}
+    Gems : int = 0                  # v2
+    SkipTutorial : logic = false    # v3
+
+SaveVersion : int = 3
+
+var Saves : weak_map(player, tycoon_save) = map{}
+
+MakeTycoonSave<constructor>(Old : tycoon_save)<transacts> := tycoon_save:
+    Version := Old.Version
+    Cash := Old.Cash
+    Rebirths := Old.Rebirths
+    PlotTiers := Old.PlotTiers
+    Gems := Old.Gems
+    SkipTutorial := Old.SkipTutorial
+
+Migrate(Save : tycoon_save)<transacts> : tycoon_save =
+    var S : tycoon_save = Save
+    if (S.Version < 2):
+        # Overrides first; the delegating constructor copies the rest.
+        # v2 added Gems, and its default of 0 is already right.
+        set S = tycoon_save:
+            Version := 2
+            MakeTycoonSave<constructor>(S)
+    if (S.Version < 3):
+        # Players who had already started skip the v3 tutorial.
+        set S = tycoon_save:
+            Version := 3
+            SkipTutorial := logic{S.Rebirths > 0 or S.Cash > 0}
+            MakeTycoonSave<constructor>(S)
+    S
+
+LoadSave(Player : player)<transacts> : tycoon_save =
+    var Save : tycoon_save = tycoon_save{Version := SaveVersion}
+    if (Existing := Saves[Player]):
+        set Save = Migrate(Existing)
+    if (set Saves[Player] = Save) {}
+    Save`,
+    },
+  },
+
+  /* ------------------------------------------------------------------ 18 */
+  {
+    slug: 'orrery-learning-island',
+    title: 'A physics curriculum students play through in Fortnite',
+    client: 'Orrery',
+    clientDescriptor: 'STEM education nonprofit',
+    year: 2025,
+    duration: '6 months',
+    role: 'UEFN Developer & Learning Engineer',
+    category: 'UEFN & Games',
+    summary:
+      'Secondary-school mechanics rebuilt as twelve puzzle rooms, with content generated from the curriculum team\'s own spreadsheet and a classroom mode run from inside the session.',
+    featured: false,
+    tech: ['UEFN', 'Verse', 'Creative Devices', 'Python', 'Unreal Engine 5'],
+    metrics: [
+      { label: 'Post-test gain', value: '+18%' },
+      { label: 'Sessions completed', value: '87%' },
+      { label: 'Engineers per lesson', value: '0' },
+    ],
+    challenge:
+      'Orrery had a strong physics curriculum and a problem every teacher recognises: students who could recite F = ma and could not use it. The worksheets tested recall. They wanted students reasoning with forces and energy, in a space those students already chose to spend time in — without asking teachers to become game designers, and without collecting a single piece of student data.',
+    approach: [
+      {
+        title: 'Made the physics the mechanic',
+        detail:
+          'Each room is a problem that can only be solved by applying the idea: set a launch angle to land a payload, balance forces to cross a gap, budget energy across a track. Trajectories are computed in Verse and flown along the real arc, so a wrong answer fails visibly and physically — not with a red cross.',
+      },
+      {
+        title: 'Separated content from code',
+        detail:
+          'Questions, parameters and hints live in a spreadsheet the curriculum team owns. A Python build step validates it — units, ranges, solvability — and generates Verse data, so a malformed row fails the build instead of reaching a classroom.',
+      },
+      {
+        title: 'Built classroom mode into the session itself',
+        detail:
+          'A teacher joins the class\'s private session as facilitator: a live board of which room each student is in, a session-wide pause, and hints to unlock per room. It all lives in-session — nothing about a student is stored or leaves the island.',
+      },
+      {
+        title: 'Measured learning, not playtime',
+        detail:
+          'In a pilot with partner schools, classes sat the same pre- and post-test as a worksheet control group. Room-level analytics showed where students stalled, and three rooms were redesigned before public launch.',
+      },
+    ],
+    architecture: [
+      { layer: 'Content', detail: 'Curriculum spreadsheet validated and compiled to Verse data by a Python build step' },
+      { layer: 'Room engine', detail: 'Verse room controller: runs a question, flies the attempt, scores it, escalates hints on repeated misses' },
+      { layer: 'Classroom', detail: 'Facilitator role with a live progress board, session-wide pause and per-room hint unlocks' },
+      { layer: 'Compliance', detail: 'No personal data requested or stored, as Fortnite\'s developer rules require; room-level analytics only; IARC age-rated' },
+    ],
+    highlights: [
+      'Hints escalate from a nudge to the method to a worked example — no student is stuck for long',
+      'Twelve rooms, three mechanics, one controller — a new lesson within a mechanic is data, not code',
+      'Every room works solo or in pairs, so it fits whatever devices a class actually has',
+      'Subtitled narration, colour-blind-safe cues, and nothing that depends on reaction speed',
+      'Answer ranges checked for solvability at build time — no unwinnable room reaches a student',
+    ],
+    outcome:
+      'In the pilot, students who played through the island scored 18% higher on the post-test than the worksheet control group, and 87% of classroom sessions finished the full path. Orrery\'s curriculum team has since added two units entirely on their own.',
+    screenshots: [
+      { caption: 'Learning path through the twelve puzzle rooms', art: 'trail' },
+      { caption: 'Launch room — the arc as flown, attempts and the hint ladder', art: 'puzzle' },
+      { caption: 'Room controller consuming generated lesson data', art: 'verse' },
+    ],
+    code: {
+      file: 'room_controller.verse',
+      language: 'verse',
+      caption:
+        'A room runs a question without knowing what it asks — the lesson data is generated from the curriculum sheet. Note the hint ladder: indexing past the last hint simply fails, so there is no bounds check to get wrong.',
+      source: `using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+
+# One question's shape. The lesson arrays that fill it are generated
+# from the curriculum sheet by tools/build_lessons.py.
+question := class:
+    Prompt : string
+    Target : float       # metres from the launch pad
+    Tolerance : float
+    Hints : []string     # nudge, then method, then worked example
+
+Say<localizes>(Text : string) : message = "{Text}"
+
+room_controller := class(creative_device):
+    @editable
+    LaunchButton : button_device = button_device{}
+    @editable
+    HintDisplay : hud_message_device = hud_message_device{}
+
+    RunQuestion(Q : question)<suspends> : void =
+        var Misses : int = 0
+        loop:
+            Student := LaunchButton.InteractedWithEvent.Await()
+            # Computed in Verse and flown along the real arc.
+            Landed := FlyPayload(Student)
+            if (Abs(Landed - Q.Target) <= Q.Tolerance):
+                Celebrate(Student)
+                break
+            set Misses += 1
+            # Past the last hint, the index fails and nothing shows.
+            if (Hint := Q.Hints[Misses - 1]):
+                HintDisplay.Show(Student, Say(Hint))`,
+    },
+  },
+
+  /* ------------------------------------------------------------------ 19 */
+  {
+    slug: 'commerce-analytics-dbt',
+    title: 'A tested dbt warehouse over a million real retail transactions',
+    client: 'Commerce Analytics',
+    clientDescriptor: 'Open-source project · public UCI dataset',
+    year: 2026,
+    duration: 'Open source',
+    role: 'Analytics Engineer',
+    category: 'Data & BI',
+    summary:
+      'dbt + DuckDB pipeline turning 1,067,371 raw lines from a real UK online retailer into tested order, customer, cohort and product models — with a live dashboard on the results.',
+    featured: false,
+    tech: ['dbt', 'DuckDB', 'SQL', 'Python', 'Parquet', 'GitHub Actions'],
+    metrics: [
+      { label: 'Source rows modelled', value: '1.07M' },
+      { label: 'Data tests passing', value: '206/206' },
+      { label: 'Duplicate lines removed', value: '34,335' },
+    ],
+    challenge:
+      'UCI\'s Online Retail II is real transaction data from a UK online retailer, December 2009 to December 2011, and it arrives the way real data does. Its two worksheets overlap by a week, so thousands of lines appear twice. Cancellations, returns and stock adjustments sit in the same table as sales, postage and bank charges are coded like products, and nearly a quarter of lines have no customer ID. Any revenue figure computed naively from it is wrong.',
+    approach: [
+      {
+        title: 'Landed the raw data untouched, then cleaned it in one place',
+        detail:
+          'A Python script downloads the source, verifies its SHA-256 checksum and lands both worksheets as Parquet. Every cleaning decision — cancellations, returns, non-product codes, missing customers, duplicates — happens once, in a staging model, as an explicit flag rather than a silent delete.',
+      },
+      {
+        title: 'Layered the models the way the business reads them',
+        detail:
+          'Staging feeds intermediate orders, customers and products, which feed the marts: order and line facts, customer and product dimensions, monthly revenue by country, cohort retention, RFM segments and product performance.',
+      },
+      {
+        title: 'Wrote tests that encode business rules, not just schemas',
+        detail:
+          '193 generic tests cover keys, relationships and accepted values. 13 singular tests check the rules that matter — revenue reconciles between staging and marts, no order precedes its customer\'s first order, retention stays between 0 and 100%.',
+      },
+      {
+        title: 'Made rebuilds reproducible and checked the incremental path',
+        detail:
+          'The whole pipeline rebuilds from nothing with one command, and its exports come out byte-identical across runs. The order-line fact is incremental: truncated at September 2011, a single incremental run restores exactly 1,025,540 rows.',
+      },
+    ],
+    architecture: [
+      { layer: 'Ingestion', detail: 'Python download with checksum verification; both worksheets landed as Parquet' },
+      { layer: 'Staging', detail: 'Typed, deduplicated lines with explicit flags for cancellations, returns, non-product codes and guests' },
+      { layer: 'Marts', detail: 'Order and line facts (incremental), RFM customer segments, cohort retention, monthly revenue by country, product performance' },
+      { layer: 'Quality', detail: '206 dbt tests, generated docs, JSON exports for the dashboard, and a GitHub Actions workflow' },
+    ],
+    highlights: [
+      'The two source worksheets overlap by a week: 22,523 duplicated lines, plus 11,812 lines repeated within a sheet',
+      'Net revenue of £18,927,399 after £716,463 of returns — 3.65% of gross by value',
+      'Champions are 13.6% of customers and bring in 52.0% of customer revenue',
+      '72.4% of customers bought more than once; the UK is 85.4% of net revenue',
+      'The live Stockroom dashboard renders straight from the pipeline\'s exports',
+    ],
+    outcome:
+      'A warehouse that turns a messy public dataset into numbers that reconcile: £18.93M net revenue across 39,516 purchase orders and 5,852 customers, with every model covered by tests. Rebuilds are one command and reproducible, and the Stockroom dashboard on this site reads directly from the results.',
+    demoSlug: 'stockroom',
+    repo: 'https://github.com/shahbazwasim/commerce-analytics-dbt',
+    screenshots: [
+      { caption: 'Stockroom dashboard: headline figures and monthly revenue', src: '/images/projects/commerce-analytics-dbt/01-overview.webp' },
+      { caption: 'Customer segments and top products', src: '/images/projects/commerce-analytics-dbt/02-segments.webp' },
+      { caption: 'Monthly cohort retention heatmap', src: '/images/projects/commerce-analytics-dbt/03-cohorts.webp' },
+    ],
+  },
 ]
 
 export const PROJECT_CATEGORIES = [
@@ -970,6 +1519,7 @@ export const PROJECT_CATEGORIES = [
   'Mobile',
   'DevOps & Cloud',
   'Design Systems',
+  'UEFN & Games',
 ] as const
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.featured)

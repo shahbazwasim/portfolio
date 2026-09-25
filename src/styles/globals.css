@@ -38,6 +38,31 @@
   --shadow-card: 0 1px 2px rgb(10 12 20 / 0.04), 0 8px 24px -8px rgb(10 12 20 / 0.1);
   --shadow-lift: 0 2px 4px rgb(10 12 20 / 0.05), 0 24px 48px -16px rgb(10 12 20 / 0.18);
 
+  /* Syntax highlighting — each clears 4.5:1 against --surface-2. */
+  --code-plain: #1f2330;
+  --code-keyword: #6d28d9;
+  --code-type: #0e7490;
+  --code-fn: #1d4ed8;
+  --code-string: #047857;
+  --code-number: #be185d;
+  --code-comment: #5f6778;
+  --code-spec: #92580a;
+  --code-punct: #5a6274;
+
+  /* Data-viz series: two categorical slots that pass the dataviz palette checks
+     (CVD separation, contrast, lightness band) against the card surface, plus a
+     one-hue sequential ramp — light for low values, dark for high. */
+  --viz-1: #2a78d6;
+  --viz-2: #eb6834;
+  --viz-seq-1: #cde2fb;
+  --viz-seq-2: #9ec5f4;
+  --viz-seq-3: #6da7ec;
+  --viz-seq-4: #3987e5;
+  --viz-seq-5: #2a78d6;
+  --viz-seq-6: #256abf;
+  --viz-seq-7: #1c5cab;
+  --viz-seq-8: #104281;
+
   color-scheme: light;
 }
 
@@ -69,6 +94,29 @@
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -8px rgb(0 0 0 / 0.5);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 24px 48px -16px rgb(0 0 0 / 0.65);
 
+  --code-plain: #dfe3ec;
+  --code-keyword: #c4b5fd;
+  --code-type: #67e8f9;
+  --code-fn: #93c5fd;
+  --code-string: #6ee7b7;
+  --code-number: #f9a8d4;
+  --code-comment: #858d9c;
+  --code-spec: #fcd34d;
+  --code-punct: #a2aab9;
+
+  /* Same hues stepped for the dark surface; the ramp reverses so low values
+     recede into the background and high values are the brightest. */
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-seq-1: #0d366b;
+  --viz-seq-2: #104281;
+  --viz-seq-3: #184f95;
+  --viz-seq-4: #1c5cab;
+  --viz-seq-5: #256abf;
+  --viz-seq-6: #2a78d6;
+  --viz-seq-7: #5598e7;
+  --viz-seq-8: #86b6ef;
+
   color-scheme: dark;
 }
 
@@ -94,6 +142,16 @@
   --color-violet: var(--accent-violet);
   --color-magenta: var(--accent-magenta);
   --color-accent: var(--accent);
+
+  --color-code-plain: var(--code-plain);
+  --color-code-keyword: var(--code-keyword);
+  --color-code-type: var(--code-type);
+  --color-code-fn: var(--code-fn);
+  --color-code-string: var(--code-string);
+  --color-code-number: var(--code-number);
+  --color-code-comment: var(--code-comment);
+  --color-code-spec: var(--code-spec);
+  --color-code-punct: var(--code-punct);
 
   --font-display: 'Clash Display', 'Satoshi', ui-sans-serif, system-ui, sans-serif;
   --font-sans:

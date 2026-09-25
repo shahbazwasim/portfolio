@@ -12,7 +12,7 @@ export default function Demos() {
     <>
       <Seo
         title="Live Demos"
-        description="Six working applications built into this site — a CRM with a drag-and-drop pipeline, a retrieval-augmented AI assistant, an analytics dashboard, a storefront, a CMS and an invoice builder with real PDF export."
+        description="Seven working applications built into this site — a CRM with a drag-and-drop pipeline, a retrieval-augmented AI assistant, an analytics dashboard, a storefront, a CMS, an invoice builder with real PDF export, and a dashboard over a real dbt warehouse."
         path="/demos"
         keywords={['live demo', 'interactive portfolio', 'React demo', 'CRM demo', 'RAG demo']}
         jsonLd={breadcrumbJsonLd([
@@ -27,7 +27,7 @@ export default function Demos() {
             Live demos
           </span>
           <h1 className="mt-5 max-w-4xl text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.02]">
-            Six real applications.
+            Seven real applications.
             <br />
             <span className="text-gradient">Not screenshots.</span>
           </h1>

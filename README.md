@@ -59,11 +59,12 @@ npm run dev          # http://localhost:5173
 | Script | What it does |
 |---|---|
 | `npm run dev` | Dev server with HMR |
-| `npm run build` | Prerender all 35 routes to `dist/` + generate sitemap & robots |
+| `npm run build` | Prerender all 42 routes to `dist/` + generate sitemap & robots |
 | `npm run preview` | Serve the production build on :4173 |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm run smoke` | Functional test of all six demos (needs a server running) |
+| `npm run smoke` | Functional test of all seven demos (needs a server running) |
 | `npm run shots` | Re-capture demo screenshots and optimise them to WebP |
+| `node scripts/sync-stockroom-data.mjs` | Refresh the Stockroom demo from the dbt project's exports |
 | `npm run og` | Regenerate the social card and app icons |
 | `npm run shoot` | Ad-hoc page screenshots — see `scripts/shoot.mjs` for flags |
 
@@ -105,7 +106,7 @@ $12/year and is the single highest-return change you can make here.
 src/
 ├─ data/            # All content lives here — edit these, not components
 │  ├─ site.ts       # Name, contact details, socials, nav
-│  ├─ projects.ts   # 14 case studies
+│  ├─ projects.ts   # 19 case studies (4 UEFN, 1 open-source dbt project)
 │  ├─ skills.ts     # Skills matrix, linked to case studies
 │  ├─ experience.ts # Career timeline + education
 │  ├─ services.ts   # Service offerings + engagement models
@@ -113,7 +114,7 @@ src/
 │  ├─ posts.ts      # Blog articles
 │  ├─ knowledge.ts  # Corpus for the Aria assistant
 │  └─ testimonials.ts
-├─ demos/           # Six standalone apps, each lazily loaded
+├─ demos/           # Seven standalone apps, each lazily loaded
 ├─ components/      # ui/ primitives, layout/ chrome, sections/ home blocks
 ├─ pages/           # One file per route
 ├─ lib/             # retrieval engine, SEO, theme, storage helpers
@@ -127,11 +128,16 @@ scripts/            # Build and asset tooling
 `src/data/projects.ts`. The card, detail page, sitemap entry and command-palette
 entry all follow automatically.
 
+Two optional fields: `code` adds a "From the source" section with a highlighted
+excerpt (Verse is supported — see `src/lib/verse-highlight.ts`), and
+`screenshots[].art` picks which generated illustration stands in for a missing
+screenshot — `island`, `hud`, `plots`, `verse` and so on, listed in `ProjectArt`.
+
 ---
 
 ## The live demos
 
-Six working applications, each lazily loaded so they never weigh down the main bundle:
+Seven working applications, each lazily loaded so they never weigh down the main bundle:
 
 | Demo | What it proves |
 |---|---|
@@ -141,12 +147,19 @@ Six working applications, each lazily loaded so they never weigh down the main b
 | **Lumina** | Storefront with faceted search, cart and checkout |
 | **Quill** | Block-based CMS with live preview |
 | **Invoicely** | Invoice builder that generates a **real PDF** in the browser |
+| **Stockroom** | Dashboard over the open-source `commerce-analytics-dbt` warehouse — **real data**, every figure from the pipeline's exports |
 
 All state persists to `localStorage`; nothing is sent to a server. `npm run smoke`
-drives all six with Playwright and asserts they actually work.
+drives all seven with Playwright and asserts they actually work.
 
 The case-study screenshots are real captures of these apps
-(`npm run shots`), not mockups.
+(`npm run shots`), not mockups. `node scripts/capture-screens.mjs --only <slug>` recaptures a
+single case study. If Playwright's bundled browser isn't installed, prefix the smoke and
+capture scripts with `PW_CHANNEL=chrome` to use an installed Chrome instead.
+
+Stockroom's data lives in `src/demos/stockroom/data.json`, generated from the dbt project's
+`exports/` by `scripts/sync-stockroom-data.mjs` — re-run it after a dbt build rather than
+editing figures by hand.
 
 ---
 
@@ -203,6 +216,13 @@ Two things worth knowing if you edit the content:
   manager can check.
 - **Testimonials are gated behind a flag** and ship empty for the same reason. Real
   recommendations from named people carry weight precisely because they're verifiable.
+- **The UEFN case studies carry no island codes and make no claims about Epic.**
+  Published islands are public: anyone can paste a code into fortnite.gg and see its
+  real play numbers, and an invented code may belong to somebody else's island. So the
+  four UEFN write-ups follow the same rule as the rest — illustrative studios, real
+  engineering — and deliberately leave out island codes, creator tags and "featured
+  in Discover" claims. Expect a UEFN interviewer to ask for a code. If you have
+  published islands, add their codes; a verifiable island beats any write-up.
 
 ---
 

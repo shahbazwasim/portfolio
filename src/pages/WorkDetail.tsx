@@ -9,6 +9,8 @@ import { GlassCard } from '@/components/ui/Surfaces'
 import { Reveal } from '@/components/ui/Reveal'
 import { LinkButton } from '@/components/ui/Button'
 import { ProjectCard } from '@/components/ui/ProjectCard'
+import { CodeWindow } from '@/components/ui/CodeWindow'
+import { SocialIcon } from '@/components/ui/SocialIcon'
 
 export default function WorkDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -82,15 +84,26 @@ export default function WorkDetail() {
               </dl>
             </Reveal>
 
-            {demo && (
+            {(demo || project.repo) && (
               <Reveal delay={0.12}>
-                <div className="mt-9">
-                  <LinkButton
-                    to={`/demos/${demo.slug}`}
-                    icon={<Play size={15} className="fill-current" />}
-                  >
-                    Try the {demo.name} demo
-                  </LinkButton>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  {demo && (
+                    <LinkButton
+                      to={`/demos/${demo.slug}`}
+                      icon={<Play size={15} className="fill-current" />}
+                    >
+                      Try the {demo.name} demo
+                    </LinkButton>
+                  )}
+                  {project.repo && (
+                    <LinkButton
+                      to={project.repo}
+                      variant="secondary"
+                      icon={<SocialIcon name="github" size={15} />}
+                    >
+                      View on GitHub
+                    </LinkButton>
+                  )}
                 </div>
               </Reveal>
             )}
@@ -102,6 +115,7 @@ export default function WorkDetail() {
                 slug={project.slug}
                 category={project.category}
                 src={project.screenshots[0]?.src}
+                art={project.screenshots[0]?.art}
                 alt={project.screenshots[0]?.caption ?? project.title}
                 className="rounded-panel shadow-[var(--shadow-lift)]"
               />
@@ -213,6 +227,26 @@ export default function WorkDetail() {
         </div>
       </section>
 
+      {/* ---------------------------------------------------------- source */}
+      {project.code && (
+        <section className="container-page section-y border-line border-t">
+          <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:gap-16">
+            <Reveal>
+              <h2 className="text-subtle font-mono text-xs tracking-[0.2em] uppercase lg:w-40">
+                From the source
+              </h2>
+            </Reveal>
+            {/* min-w-0 lets the code scroll inside its own box instead of widening the page. */}
+            <Reveal delay={0.05} className="min-w-0">
+              <div className="max-w-3xl">
+                <p className="text-muted mb-6 leading-relaxed">{project.code.caption}</p>
+                <CodeWindow code={project.code} />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
       {/* ------------------------------------------------------ highlights */}
       <section className="container-page section-y border-line border-t">
         <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:gap-16">
@@ -250,6 +284,7 @@ export default function WorkDetail() {
                     slug={`${project.slug}-${i}`}
                     category={project.category}
                     src={shot.src}
+                    art={shot.art}
                     alt={shot.caption}
                     variant={i === 2 ? 'editor' : 'default'}
                     className="rounded-card"
@@ -281,6 +316,15 @@ export default function WorkDetail() {
                     icon={<Play size={15} className="fill-current" />}
                   >
                     Try the {demo.name} demo
+                  </LinkButton>
+                )}
+                {project.repo && (
+                  <LinkButton
+                    to={project.repo}
+                    variant="secondary"
+                    icon={<SocialIcon name="github" size={15} />}
+                  >
+                    View on GitHub
                   </LinkButton>
                 )}
                 <LinkButton

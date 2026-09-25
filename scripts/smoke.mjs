@@ -8,7 +8,7 @@
  *   node scripts/smoke.mjs [--base http://localhost:5173] [--out .shots]
  */
 import { chromium } from 'playwright'
-import { mkdir, stat } from 'node:fs/promises'
+import { mkdir, stat, readFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const base = (process.argv.includes('--base')
@@ -21,7 +21,8 @@ const outDir = process.argv.includes('--out')
 
 await mkdir(outDir, { recursive: true })
 
-const browser = await chromium.launch()
+// PW_CHANNEL=chrome (or msedge) uses an installed browser instead of Playwright's own build.
+const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {})
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
   deviceScaleFactor: 2,
@@ -187,6 +188,25 @@ try {
   await page.screenshot({ path: path.join(outDir, 'smoke-cms-preview.png') })
 } catch (e) {
   check('cms demo', false, String(e).slice(0, 160))
+}
+
+/* ── Stockroom: real dbt figures render, and a table view lists every cohort ─ */
+try {
+  const stock = JSON.parse(await readFile('src/demos/stockroom/data.json', 'utf8'))
+  const fmt = new Intl.NumberFormat('en-GB')
+  await goto('/demos/stockroom')
+  const text = await page.locator('main').innerText()
+  check(
+    'stockroom: headline figures from the dbt exports render',
+    text.includes(fmt.format(stock.kpis.purchaseOrders)) && text.includes(fmt.format(stock.kpis.customers))
+  )
+  const cohorts = page.locator('[data-shot="cohorts"]')
+  await cohorts.getByRole('button', { name: /^Table$/ }).click()
+  await page.waitForTimeout(300)
+  const rows = await cohorts.locator('tbody tr').count()
+  check('stockroom: cohort table view lists every cohort', rows === stock.cohorts.length, `${rows} rows`)
+} catch (e) {
+  check('stockroom demo', false, String(e).slice(0, 160))
 }
 
 /* ── Contact form validation ────────────────────────────────────────────── */

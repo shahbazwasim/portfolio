@@ -205,7 +205,7 @@ export function BentoStats() {
               ))}
             </ul>
             <p className="text-subtle mt-auto pt-5 text-xs">
-              Across {SKILL_GROUPS.length} domains — AI, frontend, backend, data, cloud, mobile.
+              Across {SKILL_GROUPS.length} domains — AI, frontend, backend, data, cloud, mobile, games.
             </p>
           </GlassCard>
         </Reveal>

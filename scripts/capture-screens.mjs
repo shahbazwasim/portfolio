@@ -17,6 +17,8 @@ const base = (process.argv.includes('--base')
 ).replace(/\/$/, '')
 
 const OUT_ROOT = 'public/images/projects'
+/** --only <project-slug> recaptures one case study and leaves the rest untouched. */
+const only = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null
 /** The demo app window — crops out the surrounding page. */
 const APP = '.rounded-2xl.border.shadow-\\[var\\(--shadow-lift\\)\\]'
 
@@ -145,7 +147,23 @@ const SHOTS = [
   },
 ]
 
-const browser = await chromium.launch()
+// PW_CHANNEL=chrome (or msedge) uses an installed browser instead of Playwright's own build.
+const STOCKROOM = {
+  project: 'commerce-analytics-dbt',
+  route: '/demos/stockroom',
+  files: [
+    { name: '01-overview.png', selector: '[data-shot="overview"]', setup: async (page) => page.waitForTimeout(1200) },
+    { name: '02-segments.png', selector: '[data-shot="segments"]', setup: async (page) => page.waitForTimeout(800) },
+    {
+      name: '03-cohorts.png',
+      selector: '[data-shot="cohorts"]',
+      setup: async (page) => page.waitForTimeout(400),
+    },
+  ],
+}
+SHOTS.push(STOCKROOM)
+
+const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {})
 const context = await browser.newContext({
   viewport: { width: 1280, height: 900 },
   deviceScaleFactor: 2,
@@ -169,7 +187,7 @@ const HIDE_OVERLAYS = `[data-no-print] { display: none !important; }`
 let captured = 0
 let failed = 0
 
-for (const group of SHOTS) {
+for (const group of SHOTS.filter((g) => !only || g.project === only)) {
   const dir = path.join(OUT_ROOT, group.project)
   await mkdir(dir, { recursive: true })
 
@@ -181,7 +199,8 @@ for (const group of SHOTS) {
       await page.waitForTimeout(900)
       await shot.setup(page)
 
-      const frame = page.locator(APP).first()
+      // A shot can crop to one panel instead of the whole app window.
+      const frame = page.locator(shot.selector ?? APP).first()
       await frame.waitFor({ state: 'visible', timeout: 10_000 })
       await frame.screenshot({ path: path.join(dir, shot.name) })
 

@@ -18,3 +18,7 @@ Thumbs.db
 npm-debug.log*
 
 .shots
+
+# Local research notes and reports — never published
+research_notes/
+reports/

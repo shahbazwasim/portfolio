@@ -1,0 +1,931 @@
+{
+ "source": {
+  "dataset": "Online Retail II",
+  "citation": "Chen, D. (2012). Online Retail II [Dataset]. UCI Machine Learning Repository.",
+  "doi": "https://doi.org/10.24432/C5CG6D",
+  "url": "https://archive.ics.uci.edu/dataset/502/online+retail+ii",
+  "licence": "CC BY 4.0",
+  "currency": "GBP"
+ },
+ "window": {
+  "first_date": "2009-12-01",
+  "last_date": "2011-12-09"
+ },
+ "kpis": {
+  "netRevenue": 18927399.07,
+  "returnRateByValue": 0.0365,
+  "averageOrderValue": 497.11,
+  "guestShareOfRevenue": 0.1357,
+  "topCountry": "United Kingdom",
+  "topCountryShare": 0.8543,
+  "purchaseOrders": 39516,
+  "countries": 43,
+  "customers": 5852,
+  "repeatCustomerRate": 0.7235
+ },
+ "months": [
+  {
+   "month": "2009-12-01",
+   "netRevenue": 778343.08,
+   "orders": 1666,
+   "averageOrderValue": 478.93,
+   "partial": false
+  },
+  {
+   "month": "2010-01-01",
+   "netRevenue": 604831.79,
+   "orders": 1049,
+   "averageOrderValue": 583.7,
+   "partial": false
+  },
+  {
+   "month": "2010-02-01",
+   "netRevenue": 525334.24,
+   "orders": 1189,
+   "averageOrderValue": 452.41,
+   "partial": false
+  },
+  {
+   "month": "2010-03-01",
+   "netRevenue": 752102.13,
+   "orders": 1647,
+   "averageOrderValue": 462.48,
+   "partial": false
+  },
+  {
+   "month": "2010-04-01",
+   "netRevenue": 636315.67,
+   "orders": 1435,
+   "averageOrderValue": 450.41,
+   "partial": false
+  },
+  {
+   "month": "2010-05-01",
+   "netRevenue": 606299.14,
+   "orders": 1484,
+   "averageOrderValue": 433.62,
+   "partial": false
+  },
+  {
+   "month": "2010-06-01",
+   "netRevenue": 670209.73,
+   "orders": 1612,
+   "averageOrderValue": 432.12,
+   "partial": false
+  },
+  {
+   "month": "2010-07-01",
+   "netRevenue": 615861.59,
+   "orders": 1507,
+   "averageOrderValue": 420.04,
+   "partial": false
+  },
+  {
+   "month": "2010-08-01",
+   "netRevenue": 661640.12,
+   "orders": 1402,
+   "averageOrderValue": 480.77,
+   "partial": false
+  },
+  {
+   "month": "2010-09-01",
+   "netRevenue": 841556.7,
+   "orders": 1789,
+   "averageOrderValue": 485.88,
+   "partial": false
+  },
+  {
+   "month": "2010-10-01",
+   "netRevenue": 1068984.91,
+   "orders": 2244,
+   "averageOrderValue": 487.72,
+   "partial": false
+  },
+  {
+   "month": "2010-11-01",
+   "netRevenue": 1394601.8,
+   "orders": 2719,
+   "averageOrderValue": 525.82,
+   "partial": false
+  },
+  {
+   "month": "2010-12-01",
+   "netRevenue": 758090.5,
+   "orders": 1550,
+   "averageOrderValue": 500.41,
+   "partial": false
+  },
+  {
+   "month": "2011-01-01",
+   "netRevenue": 578855.19,
+   "orders": 1081,
+   "averageOrderValue": 620.15,
+   "partial": false
+  },
+  {
+   "month": "2011-02-01",
+   "netRevenue": 499464.35,
+   "orders": 1093,
+   "averageOrderValue": 464.59,
+   "partial": false
+  },
+  {
+   "month": "2011-03-01",
+   "netRevenue": 679329.21,
+   "orders": 1440,
+   "averageOrderValue": 479.05,
+   "partial": false
+  },
+  {
+   "month": "2011-04-01",
+   "netRevenue": 482061.93,
+   "orders": 1235,
+   "averageOrderValue": 417.31,
+   "partial": false
+  },
+  {
+   "month": "2011-05-01",
+   "netRevenue": 731004.77,
+   "orders": 1668,
+   "averageOrderValue": 443.62,
+   "partial": false
+  },
+  {
+   "month": "2011-06-01",
+   "netRevenue": 723845.14,
+   "orders": 1525,
+   "averageOrderValue": 483.65,
+   "partial": false
+  },
+  {
+   "month": "2011-07-01",
+   "netRevenue": 676812.08,
+   "orders": 1452,
+   "averageOrderValue": 473.98,
+   "partial": false
+  },
+  {
+   "month": "2011-08-01",
+   "netRevenue": 701289.93,
+   "orders": 1339,
+   "averageOrderValue": 540.86,
+   "partial": false
+  },
+  {
+   "month": "2011-09-01",
+   "netRevenue": 1011339.74,
+   "orders": 1818,
+   "averageOrderValue": 565.63,
+   "partial": false
+  },
+  {
+   "month": "2011-10-01",
+   "netRevenue": 1061701.22,
+   "orders": 2005,
+   "averageOrderValue": 550.28,
+   "partial": false
+  },
+  {
+   "month": "2011-11-01",
+   "netRevenue": 1427124.54,
+   "orders": 2751,
+   "averageOrderValue": 527.85,
+   "partial": false
+  },
+  {
+   "month": "2011-12-01",
+   "netRevenue": 440399.56,
+   "orders": 816,
+   "averageOrderValue": 753.05,
+   "partial": true
+  }
+ ],
+ "cohorts": [
+  {
+   "month": "2009-12-01",
+   "size": 951,
+   "retention": [
+    1,
+    0.3502,
+    0.3333,
+    0.4248,
+    0.3785,
+    0.3596,
+    0.3764,
+    0.3438,
+    0.3375,
+    0.3617,
+    0.4217,
+    0.4963,
+    0.3764,
+    0.2818,
+    0.244,
+    0.3028,
+    0.2629,
+    0.3028,
+    0.2839,
+    0.2587,
+    0.2545,
+    0.3134,
+    0.3039,
+    0.4059,
+    0.1966
+   ]
+  },
+  {
+   "month": "2010-01-01",
+   "size": 368,
+   "retention": [
+    1,
+    0.2147,
+    0.3207,
+    0.3152,
+    0.2717,
+    0.3098,
+    0.269,
+    0.2337,
+    0.2853,
+    0.3261,
+    0.3098,
+    0.1793,
+    0.2283,
+    0.1793,
+    0.1957,
+    0.1522,
+    0.2446,
+    0.2038,
+    0.1929,
+    0.2011,
+    0.2527,
+    0.1984,
+    0.2527,
+    0.0571
+   ]
+  },
+  {
+   "month": "2010-02-01",
+   "size": 375,
+   "retention": [
+    1,
+    0.2347,
+    0.2267,
+    0.2933,
+    0.2453,
+    0.1973,
+    0.192,
+    0.288,
+    0.256,
+    0.2773,
+    0.1147,
+    0.1253,
+    0.152,
+    0.176,
+    0.1227,
+    0.2,
+    0.16,
+    0.1627,
+    0.144,
+    0.2293,
+    0.2293,
+    0.1653,
+    0.0587
+   ]
+  },
+  {
+   "month": "2010-03-01",
+   "size": 441,
+   "retention": [
+    1,
+    0.1905,
+    0.2313,
+    0.2426,
+    0.2313,
+    0.2041,
+    0.2472,
+    0.3061,
+    0.2766,
+    0.1088,
+    0.1156,
+    0.1451,
+    0.1995,
+    0.1633,
+    0.1995,
+    0.1701,
+    0.1746,
+    0.1565,
+    0.1769,
+    0.2041,
+    0.2132,
+    0.0771
+   ]
+  },
+  {
+   "month": "2010-04-01",
+   "size": 294,
+   "retention": [
+    1,
+    0.1905,
+    0.1905,
+    0.1599,
+    0.1837,
+    0.2211,
+    0.2755,
+    0.2653,
+    0.1054,
+    0.1088,
+    0.0748,
+    0.1395,
+    0.1429,
+    0.1565,
+    0.1565,
+    0.1565,
+    0.1395,
+    0.1497,
+    0.1803,
+    0.2279,
+    0.0578
+   ]
+  },
+  {
+   "month": "2010-05-01",
+   "size": 255,
+   "retention": [
+    1,
+    0.1569,
+    0.1686,
+    0.1765,
+    0.1765,
+    0.2549,
+    0.2118,
+    0.1255,
+    0.0588,
+    0.0824,
+    0.1137,
+    0.1333,
+    0.1529,
+    0.1529,
+    0.098,
+    0.1255,
+    0.1373,
+    0.1647,
+    0.1529,
+    0.0471
+   ]
+  },
+  {
+   "month": "2010-06-01",
+   "size": 267,
+   "retention": [
+    1,
+    0.176,
+    0.1873,
+    0.206,
+    0.2322,
+    0.2846,
+    0.1273,
+    0.0899,
+    0.0824,
+    0.1124,
+    0.1049,
+    0.1386,
+    0.1498,
+    0.1236,
+    0.1124,
+    0.1236,
+    0.1311,
+    0.2022,
+    0.0487
+   ]
+  },
+  {
+   "month": "2010-07-01",
+   "size": 185,
+   "retention": [
+    1,
+    0.1568,
+    0.1838,
+    0.2973,
+    0.2919,
+    0.1405,
+    0.1135,
+    0.1459,
+    0.1459,
+    0.1135,
+    0.1351,
+    0.1459,
+    0.1297,
+    0.1351,
+    0.1946,
+    0.173,
+    0.2378,
+    0.0811
+   ]
+  },
+  {
+   "month": "2010-08-01",
+   "size": 163,
+   "retention": [
+    1,
+    0.1963,
+    0.2883,
+    0.3252,
+    0.1656,
+    0.1166,
+    0.0982,
+    0.1288,
+    0.135,
+    0.1288,
+    0.1288,
+    0.1166,
+    0.1472,
+    0.1718,
+    0.1718,
+    0.1963,
+    0.0736
+   ]
+  },
+  {
+   "month": "2010-09-01",
+   "size": 239,
+   "retention": [
+    1,
+    0.2301,
+    0.2343,
+    0.1297,
+    0.0879,
+    0.1046,
+    0.1381,
+    0.0962,
+    0.1297,
+    0.1297,
+    0.1213,
+    0.1004,
+    0.2259,
+    0.1674,
+    0.1674,
+    0.0544
+   ]
+  },
+  {
+   "month": "2010-10-01",
+   "size": 375,
+   "retention": [
+    1,
+    0.2587,
+    0.1467,
+    0.1253,
+    0.088,
+    0.0827,
+    0.1307,
+    0.1387,
+    0.1067,
+    0.0933,
+    0.1067,
+    0.128,
+    0.192,
+    0.232,
+    0.0693
+   ]
+  },
+  {
+   "month": "2010-11-01",
+   "size": 326,
+   "retention": [
+    1,
+    0.1748,
+    0.0951,
+    0.0951,
+    0.0767,
+    0.089,
+    0.1288,
+    0.1012,
+    0.0859,
+    0.092,
+    0.1104,
+    0.1472,
+    0.2515,
+    0.0644
+   ]
+  },
+  {
+   "month": "2010-12-01",
+   "size": 76,
+   "retention": [
+    1,
+    0.0921,
+    0.0526,
+    0.0921,
+    0.1184,
+    0.0658,
+    0.0526,
+    0.0921,
+    0.0526,
+    0.0263,
+    0.0921,
+    0.1974,
+    0.0263
+   ]
+  },
+  {
+   "month": "2011-01-01",
+   "size": 72,
+   "retention": [
+    1,
+    0.1667,
+    0.2222,
+    0.1944,
+    0.2222,
+    0.1528,
+    0.1528,
+    0.125,
+    0.1111,
+    0.2083,
+    0.25,
+    0.1111
+   ]
+  },
+  {
+   "month": "2011-02-01",
+   "size": 125,
+   "retention": [
+    1,
+    0.16,
+    0.16,
+    0.184,
+    0.216,
+    0.16,
+    0.16,
+    0.152,
+    0.152,
+    0.184,
+    0.064
+   ]
+  },
+  {
+   "month": "2011-03-01",
+   "size": 179,
+   "retention": [
+    1,
+    0.1788,
+    0.2179,
+    0.2011,
+    0.2235,
+    0.1508,
+    0.2067,
+    0.2011,
+    0.2402,
+    0.095
+   ]
+  },
+  {
+   "month": "2011-04-01",
+   "size": 106,
+   "retention": [
+    1,
+    0.2453,
+    0.1981,
+    0.1981,
+    0.1792,
+    0.2358,
+    0.1792,
+    0.2547,
+    0.1132
+   ]
+  },
+  {
+   "month": "2011-05-01",
+   "size": 111,
+   "retention": [
+    1,
+    0.2342,
+    0.2432,
+    0.1622,
+    0.2162,
+    0.2072,
+    0.2613,
+    0.1171
+   ]
+  },
+  {
+   "month": "2011-06-01",
+   "size": 108,
+   "retention": [
+    1,
+    0.2315,
+    0.213,
+    0.2685,
+    0.2037,
+    0.2778,
+    0.0833
+   ]
+  },
+  {
+   "month": "2011-07-01",
+   "size": 101,
+   "retention": [
+    1,
+    0.2079,
+    0.297,
+    0.2772,
+    0.3465,
+    0.1584
+   ]
+  },
+  {
+   "month": "2011-08-01",
+   "size": 107,
+   "retention": [
+    1,
+    0.2617,
+    0.2991,
+    0.2617,
+    0.1682
+   ]
+  },
+  {
+   "month": "2011-09-01",
+   "size": 188,
+   "retention": [
+    1,
+    0.2713,
+    0.3777,
+    0.1489
+   ]
+  },
+  {
+   "month": "2011-10-01",
+   "size": 221,
+   "retention": [
+    1,
+    0.3167,
+    0.1584
+   ]
+  },
+  {
+   "month": "2011-11-01",
+   "size": 191,
+   "retention": [
+    1,
+    0.1414
+   ]
+  },
+  {
+   "month": "2011-12-01",
+   "size": 28,
+   "retention": [
+    1
+   ]
+  }
+ ],
+ "segments": [
+  {
+   "segment": "Champions",
+   "description": "Bought recently and buy often (R 5, F 4-5)",
+   "customers": 796,
+   "shareOfCustomers": 0.1355,
+   "shareOfRevenue": 0.5202
+  },
+  {
+   "segment": "Loyal Customers",
+   "description": "Buy often and fairly recently (R 3-4, F 4-5)",
+   "customers": 1056,
+   "shareOfCustomers": 0.1797,
+   "shareOfRevenue": 0.2722
+  },
+  {
+   "segment": "Potential Loyalists",
+   "description": "Recent customers with a few orders (R 4-5, F 2-3)",
+   "customers": 708,
+   "shareOfCustomers": 0.1205,
+   "shareOfRevenue": 0.0413
+  },
+  {
+   "segment": "New Customers",
+   "description": "Bought very recently but only once so far (R 5, F 1)",
+   "customers": 72,
+   "shareOfCustomers": 0.0123,
+   "shareOfRevenue": 0.0015
+  },
+  {
+   "segment": "Promising",
+   "description": "Recent one-off buyers (R 4, F 1)",
+   "customers": 163,
+   "shareOfCustomers": 0.0277,
+   "shareOfRevenue": 0.0033
+  },
+  {
+   "segment": "Need Attention",
+   "description": "Middling recency and frequency (R 3, F 3)",
+   "customers": 287,
+   "shareOfCustomers": 0.0489,
+   "shareOfRevenue": 0.0227
+  },
+  {
+   "segment": "About to Sleep",
+   "description": "Recency slipping and few orders (R 3, F 1-2)",
+   "customers": 425,
+   "shareOfCustomers": 0.0723,
+   "shareOfRevenue": 0.0137
+  },
+  {
+   "segment": "At Risk",
+   "description": "Used to buy regularly but not recently (R 1-2, F 3-4)",
+   "customers": 647,
+   "shareOfCustomers": 0.1101,
+   "shareOfRevenue": 0.0555
+  },
+  {
+   "segment": "Cannot Lose Them",
+   "description": "Were among the most frequent buyers but have not bought for a long time (R 1-2, F 5)",
+   "customers": 66,
+   "shareOfCustomers": 0.0112,
+   "shareOfRevenue": 0.0284
+  },
+  {
+   "segment": "Hibernating",
+   "description": "Last bought long ago and rarely (R 1-2, F 1-2)",
+   "customers": 1632,
+   "shareOfCustomers": 0.2778,
+   "shareOfRevenue": 0.0412
+  },
+  {
+   "segment": "Returns only",
+   "description": "Returned goods in the window but made no purchase in it, so has no RFM scores",
+   "customers": 23,
+   "shareOfCustomers": 0.0039,
+   "shareOfRevenue": -0.0001
+  }
+ ],
+ "products": [
+  {
+   "rank": 1,
+   "description": "REGENCY CAKESTAND 3 TIER",
+   "netRevenue": 314045.02,
+   "unitsSold": 26478,
+   "returnRate": 0.0548
+  },
+  {
+   "rank": 2,
+   "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+   "netRevenue": 251781.63,
+   "unitsSold": 94719,
+   "returnRate": 0.0384
+  },
+  {
+   "rank": 3,
+   "description": "JUMBO BAG RED RETROSPOT",
+   "netRevenue": 180512.16,
+   "unitsSold": 97176,
+   "returnRate": 0.0125
+  },
+  {
+   "rank": 4,
+   "description": "PARTY BUNTING",
+   "netRevenue": 147079.73,
+   "unitsSold": 28200,
+   "returnRate": 0.0101
+  },
+  {
+   "rank": 5,
+   "description": "ASSORTED COLOUR BIRD ORNAMENT",
+   "netRevenue": 128550.42,
+   "unitsSold": 80082,
+   "returnRate": 0.0064
+  },
+  {
+   "rank": 6,
+   "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+   "netRevenue": 116298.59,
+   "unitsSold": 35084,
+   "returnRate": 0.0168
+  },
+  {
+   "rank": 7,
+   "description": "CHILLI LIGHTS",
+   "netRevenue": 79905.13,
+   "unitsSold": 15841,
+   "returnRate": 0.0092
+  },
+  {
+   "rank": 8,
+   "description": "SMALL POPCORN HOLDER",
+   "netRevenue": 78903.62,
+   "unitsSold": 88499,
+   "returnRate": 0.0091
+  },
+  {
+   "rank": 9,
+   "description": "JUMBO BAG PINK POLKADOT",
+   "netRevenue": 75457.64,
+   "unitsSold": 39437,
+   "returnRate": 0.0122
+  },
+  {
+   "rank": 10,
+   "description": "ROTATING SILVER ANGELS T-LIGHT HLDR",
+   "netRevenue": 70969.95,
+   "unitsSold": 31409,
+   "returnRate": 0.2987
+  }
+ ],
+ "quality": [
+  {
+   "check": "source_rows",
+   "description": "All rows landed from both worksheets",
+   "treatment": "kept in staging",
+   "rows": 1067371,
+   "share": 1
+  },
+  {
+   "check": "exact_duplicate",
+   "description": "Identical in all eight source columns to an earlier row",
+   "treatment": "excluded from every downstream model",
+   "rows": 34335,
+   "share": 0.0322
+  },
+  {
+   "check": "worksheet_overlap",
+   "description": "Second-worksheet copy of a line invoiced 2010-12-01 to 2010-12-09",
+   "treatment": "excluded (subset of exact_duplicate)",
+   "rows": 22523,
+   "share": 0.0211
+  },
+  {
+   "check": "repeated_line",
+   "description": "Same line repeated on the same worksheet",
+   "treatment": "excluded (subset of exact_duplicate)",
+   "rows": 11812,
+   "share": 0.0111
+  },
+  {
+   "check": "cancellation",
+   "description": "Line on an invoice whose number starts with C",
+   "treatment": "kept; merchandise lines are returns",
+   "rows": 19494,
+   "share": 0.0183
+  },
+  {
+   "check": "negative_quantity",
+   "description": "Quantity below zero",
+   "treatment": "kept; classified as return or stock adjustment",
+   "rows": 22950,
+   "share": 0.0215
+  },
+  {
+   "check": "return",
+   "description": "Merchandise line on a cancellation invoice",
+   "treatment": "deducted from net revenue",
+   "rows": 18286,
+   "share": 0.0171
+  },
+  {
+   "check": "stock_adjustment",
+   "description": "Negative merchandise quantity on a normal invoice (write-off, always priced at 0)",
+   "treatment": "excluded from orders",
+   "rows": 3455,
+   "share": 0.0032
+  },
+  {
+   "check": "non_product",
+   "description": "Postage, fees, manual adjustments, discounts, samples, vouchers, bad debt, tests",
+   "treatment": "excluded from merchandise revenue",
+   "rows": 5913,
+   "share": 0.0055
+  },
+  {
+   "check": "zero_price",
+   "description": "Merchandise line priced at 0",
+   "treatment": "excluded from revenue",
+   "rows": 2696,
+   "share": 0.0025
+  },
+  {
+   "check": "missing_customer_id",
+   "description": "No customer id on the line",
+   "treatment": "kept in revenue; excluded from customer marts",
+   "rows": 243007,
+   "share": 0.2277
+  },
+  {
+   "check": "missing_description",
+   "description": "No product description on the line",
+   "treatment": "kept; product name taken from other lines",
+   "rows": 4382,
+   "share": 0.0041
+  },
+  {
+   "check": "unclassified_stock_code",
+   "description": "Stock code that matches no rule in the stock_code_rules seed",
+   "treatment": "fails the accepted_values test",
+   "rows": 0,
+   "share": 0
+  },
+  {
+   "check": "revenue_line",
+   "description": "De-duplicated sale or return line",
+   "treatment": "counted in revenue",
+   "rows": 1021272,
+   "share": 0.9568
+  }
+ ]
+}

@@ -17,7 +17,7 @@ export function DemosPreview() {
                 Don't take my word for it — <span className="text-gradient">click something</span>
               </>
             }
-            description="Six working applications built into this site. Real state, real interactions, real PDF generation. No screenshots, no video walkthroughs."
+            description="Seven working applications built into this site. Real state, real interactions, real PDF generation, real data. No screenshots, no video walkthroughs."
           />
           <Link
             to="/demos"

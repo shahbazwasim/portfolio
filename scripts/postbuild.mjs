@@ -13,8 +13,8 @@ const DIST = 'dist'
 const siteSource = await readFile('src/data/site.ts', 'utf8')
 const ORIGIN = (siteSource.match(/url:\s*'([^']+)'/)?.[1] ?? 'https://example.com').replace(/\/$/, '')
 
-/** Routes that should never be indexed. */
-const EXCLUDE = new Set(['/404', '/__forms'])
+/** Routes that should never be indexed. /uefn is unlisted and marked noindex. */
+const EXCLUDE = new Set(['/404', '/__forms', '/uefn'])
 
 /** Rough importance ranking — home first, then top-level, then detail pages. */
 function priorityFor(route) {

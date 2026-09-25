@@ -37,9 +37,9 @@ export default function Work() {
     <>
       <Seo
         title="Work"
-        description={`${PROJECTS.length} detailed case studies across AI, CRM platforms, e-commerce, data engineering and cloud infrastructure — with the architecture decisions and measured outcomes behind each one.`}
+        description={`${PROJECTS.length} detailed case studies across AI, CRM platforms, e-commerce, data engineering, cloud infrastructure and UEFN game development — with the architecture decisions and measured outcomes behind each one.`}
         path="/work"
-        keywords={['case studies', 'portfolio', 'AI projects', 'CRM development', 'Shopify', 'Magento']}
+        keywords={['case studies', 'portfolio', 'AI projects', 'CRM development', 'Shopify', 'Magento', 'UEFN', 'Verse', 'Fortnite Creative']}
         jsonLd={breadcrumbJsonLd([
           { name: 'Home', path: '/' },
           { name: 'Work', path: '/work' },

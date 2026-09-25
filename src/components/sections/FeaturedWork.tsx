@@ -19,7 +19,7 @@ export function FeaturedWork() {
                 Problems worth <span className="text-gradient">solving properly</span>
               </>
             }
-            description="Four case studies with the architecture decisions and the numbers behind them. Several ship with a live demo you can click through."
+            description="Case studies with the architecture decisions and the numbers behind them — from AI systems to Fortnite islands. Several ship with a live demo you can click through."
           />
           <Link
             to="/work"

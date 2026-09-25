@@ -35,6 +35,7 @@ export function ProjectCard({
                 slug={project.slug}
                 category={project.category}
                 src={project.screenshots[0]?.src}
+                art={project.screenshots[0]?.art}
                 alt={project.screenshots[0]?.caption ?? project.title}
               />
             </div>

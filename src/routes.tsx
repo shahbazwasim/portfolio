@@ -41,6 +41,12 @@ export const routes: RouteRecord[] = [
         getStaticPaths: () => PROJECTS.map((p) => `/work/${p.slug}`),
       },
       {
+        // Unlisted: shared by direct link only, so it is not in NAV_LINKS.
+        path: 'uefn',
+        lazy: page(() => import('./pages/Uefn')),
+        entry: 'src/pages/Uefn.tsx',
+      },
+      {
         path: 'ai',
         lazy: page(() => import('./pages/AI')),
         entry: 'src/pages/AI.tsx',

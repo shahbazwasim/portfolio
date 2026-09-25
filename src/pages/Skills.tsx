@@ -99,7 +99,7 @@ export default function Skills() {
     <>
       <Seo
         title="Skills"
-        description={`${TOTAL_SKILLS} technical skills across ${SKILL_GROUPS.length} domains — AI and machine learning, frontend, backend, CRM, e-commerce, data engineering, cloud, mobile and design. Each linked to the projects that used it.`}
+        description={`${TOTAL_SKILLS} technical skills across ${SKILL_GROUPS.length} domains — AI and machine learning, frontend, backend, CRM, e-commerce, data engineering, cloud, mobile, game development and design. Each linked to the projects that used it.`}
         path="/skills"
         keywords={['skills', 'tech stack', 'React', 'Node.js', 'Python', 'AI', 'AWS', 'Power BI']}
         jsonLd={breadcrumbJsonLd([
@@ -185,7 +185,9 @@ export default function Skills() {
         ) : (
           <div className="grid gap-5 lg:grid-cols-2">
             {groups.map((g, i) => (
-              <Reveal key={g.id} delay={Math.min(i * 0.04, 0.2)}>
+              // min-w-0: grid items otherwise refuse to shrink below their longest
+              // skill name, and the row's `truncate` never gets the chance to engage.
+              <Reveal key={g.id} delay={Math.min(i * 0.04, 0.2)} className="min-w-0">
                 <GlassCard className="flex h-full flex-col p-6 lg:p-7" ring={false}>
                   <div className="mb-1 flex items-start gap-3.5">
                     <span className="border-line bg-surface-2 text-accent grid h-10 w-10 shrink-0 place-items-center rounded-xl border">

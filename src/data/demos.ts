@@ -126,6 +126,24 @@ export const DEMOS: Demo[] = [
     accent: 'magenta',
     icon: 'receipt',
   },
+  {
+    slug: 'stockroom',
+    name: 'Stockroom',
+    tagline: 'Real retail data from a tested dbt warehouse',
+    description:
+      'A dashboard over 1,067,371 real e-commerce transactions (UCI Online Retail II, 2009–2011), computed by an open-source dbt + DuckDB pipeline with 206 data tests. Every figure comes from the pipeline\'s exports — nothing on this page is simulated.',
+    tryThis: [
+      'Hover the revenue chart to read any month',
+      'Compare each segment\'s share of customers with its share of revenue',
+      'Hover a cell in the cohort heatmap for the exact retention',
+      'Switch any panel to Table to see the underlying numbers',
+    ],
+    tech: ['dbt', 'DuckDB', 'SQL', 'React', 'Recharts'],
+    proves: ['Analytics engineering', 'Data modelling & testing', 'Honest data visualisation'],
+    projectSlug: 'commerce-analytics-dbt',
+    accent: 'emerald',
+    icon: 'chart',
+  },
 ]
 
 export function getDemo(slug: string) {
