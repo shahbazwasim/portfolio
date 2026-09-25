@@ -65,6 +65,7 @@ npm run dev          # http://localhost:5173
 | `npm run smoke` | Functional test of all seven demos (needs a server running) |
 | `npm run shots` | Re-capture demo screenshots and optimise them to WebP |
 | `node scripts/sync-stockroom-data.mjs` | Refresh the Stockroom demo from the dbt project's exports |
+| `node scripts/concept-art.mjs` | Render the /uefn page's concept art (three.js scenes) to WebP; `--only <shot>` for one |
 | `npm run og` | Regenerate the social card and app icons |
 | `npm run shoot` | Ad-hoc page screenshots — see `scripts/shoot.mjs` for flags |
 
@@ -207,7 +208,7 @@ Things that matter and are already handled:
 
 ## Content honesty
 
-Two things worth knowing if you edit the content:
+A few things worth knowing if you edit the content:
 
 - **Case-study client names are illustrative brands** (Helio Group, Lumina, Vantage
   Retail…), not real companies. The engineering substance — architecture, stack
@@ -223,6 +224,11 @@ Two things worth knowing if you edit the content:
   engineering — and deliberately leave out island codes, creator tags and "featured
   in Discover" claims. Expect a UEFN interviewer to ask for a code. If you have
   published islands, add their codes; a verifiable island beats any write-up.
+- **The /uefn page's images are concept art, and say so.** They are procedural
+  three.js scenes rendered by `scripts/concept-art.mjs` — no game assets, no
+  screenshots — and every one is captioned as concept art. Real in-game screenshots
+  go only with a real island in `PUBLISHED_ISLANDS` (`src/data/uefn.ts`), which is
+  also the only place an island code can appear.
 
 ---
 

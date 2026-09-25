@@ -1,18 +1,82 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, Check, ChevronDown, Copy, Lightbulb } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, Copy, Lightbulb, Maximize2 } from 'lucide-react'
 import { Seo } from '@/lib/seo'
+import { cn } from '@/lib/cn'
 import { getProject } from '@/data/projects'
 import {
   CREATOR_PROFILE,
+  HERO_ART,
   PUBLISHED_ISLANDS,
   VERSE_CONCEPTS,
+  type ConceptArt,
   type PublishedIsland,
 } from '@/data/uefn'
 import { GlassCard } from '@/components/ui/Surfaces'
 import { Reveal } from '@/components/ui/Reveal'
 import { ProjectVisual } from '@/components/ui/ProjectVisual'
 import { CodeWindow } from '@/components/ui/CodeWindow'
+import { Lightbox, type LightboxImage } from '@/components/ui/Lightbox'
 import { LinkButton } from '@/components/ui/Button'
+
+const ART_DIR = '/images/uefn/concept-art'
+
+const artSources = (name: string) => ({
+  src: `${ART_DIR}/${name}-1600.webp`,
+  srcSet: `${ART_DIR}/${name}-800.webp 800w, ${ART_DIR}/${name}-1600.webp 1600w`,
+})
+
+/** Every concept image on the page, in the order the viewer pages through them. */
+const GALLERY: ConceptArt[] = [HERO_ART, ...VERSE_CONCEPTS.flatMap((c) => [c.art, c.detail])]
+const VIEWER_IMAGES: LightboxImage[] = GALLERY.map((art) => ({
+  ...artSources(art.name),
+  alt: art.alt,
+  caption: `${art.caption} — concept art, not a game screenshot`,
+}))
+const viewerIndex = (art: ConceptArt) => GALLERY.findIndex((a) => a.name === art.name)
+
+/** A concept render that opens the viewer. */
+function ConceptImage({
+  art,
+  sizes,
+  priority = false,
+  onOpen,
+  className,
+}: {
+  art: ConceptArt
+  sizes: string
+  priority?: boolean
+  onOpen: () => void
+  className?: string
+}) {
+  const { src, srcSet } = artSources(art.name)
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className={cn('group bg-surface-2 relative block w-full overflow-hidden', className)}
+    >
+      <span className="sr-only">View larger: </span>
+      <img
+        src={src}
+        srcSet={srcSet}
+        sizes={sizes}
+        width={1600}
+        height={900}
+        alt={art.alt}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
+        decoding="async"
+        className="aspect-video w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      />
+      <span
+        aria-hidden="true"
+        className="bg-bg/70 text-ink absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full opacity-0 backdrop-blur transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+      >
+        <Maximize2 size={14} />
+      </span>
+    </button>
+  )
+}
 
 /** Island code with one-click copy — the code is what a visitor pastes into Fortnite. */
 function CopyCode({ code }: { code: string }) {
@@ -86,25 +150,37 @@ function IslandCard({ island }: { island: PublishedIsland }) {
   )
 }
 
-function ConceptCard({ slug, title, note }: { slug: string; title: string; note: string }) {
+function ConceptCard({
+  slug,
+  title,
+  note,
+  art,
+  onView,
+}: {
+  slug: string
+  title: string
+  note: string
+  art: ConceptArt
+  onView: (art: ConceptArt) => void
+}) {
   const project = getProject(slug)
   if (!project) return null
 
   return (
     <GlassCard className="flex h-full flex-col p-3 lg:p-4" ring={false}>
       <figure>
-        <ProjectVisual
-          slug={project.slug}
-          category={project.category}
-          art={project.screenshots[0]?.art}
-          alt={`Illustration: ${project.screenshots[0]?.caption ?? title}`}
+        <ConceptImage
+          art={art}
+          sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, 100vw"
+          onOpen={() => onView(art)}
+          className="rounded-xl"
         />
         {/* Same seeds as the case study's interface grid, so the art matches it. */}
         <div className="mt-2 grid grid-cols-2 gap-2">
-          {project.screenshots.slice(1, 3).map((shot, i) => (
+          {project.screenshots.slice(0, 2).map((shot, i) => (
             <ProjectVisual
               key={shot.caption}
-              slug={`${project.slug}-${i + 1}`}
+              slug={i === 0 ? project.slug : `${project.slug}-${i}`}
               category={project.category}
               art={shot.art}
               alt={`Illustration: ${shot.caption}`}
@@ -113,7 +189,7 @@ function ConceptCard({ slug, title, note }: { slug: string; title: string; note:
           ))}
         </div>
         <figcaption className="text-subtle mt-2 px-1 font-mono text-[0.625rem] tracking-[0.12em] uppercase">
-          Illustrations — not screenshots
+          Concept art and illustrations — not screenshots
         </figcaption>
       </figure>
 
@@ -148,10 +224,13 @@ function ConceptCard({ slug, title, note }: { slug: string; title: string; note:
 /**
  * Unlisted UEFN page: shared by direct link, kept out of the header menu, the
  * sitemap and search indexes. Published islands only ever come from
- * PUBLISHED_ISLANDS, so the page never shows a code that doesn't open.
+ * PUBLISHED_ISLANDS, so the page never shows a code that doesn't open; the
+ * concept art is captioned as such wherever it appears.
  */
 export default function Uefn() {
   const hasIslands = PUBLISHED_ISLANDS.length > 0
+  const [viewing, setViewing] = useState<number | null>(null)
+  const view = (art: ConceptArt) => setViewing(viewerIndex(art))
 
   return (
     <>
@@ -163,10 +242,11 @@ export default function Uefn() {
             : 'Verse concept builds for Fortnite game systems: a ranked round engine, an AI director, a tycoon save schema and a physics puzzle controller.'
         }
         path="/uefn"
+        image={`${ART_DIR}/hero-og.jpg`}
         noIndex
       />
 
-      <section className="container-page grid items-center gap-10 pt-32 pb-12 lg:grid-cols-[1.2fr_1fr] lg:gap-14 lg:pt-40">
+      <section className="container-page grid items-center gap-10 pt-32 pb-12 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pt-40">
         <Reveal>
           <span className="text-subtle font-mono text-xs tracking-[0.2em] uppercase">
             UEFN & Verse
@@ -196,15 +276,15 @@ export default function Uefn() {
 
         <Reveal delay={0.06} direction="right" className="min-w-0">
           <figure>
-            <ProjectVisual
-              slug="uefn-portfolio"
-              category="UEFN & Games"
-              art="island"
-              alt="Illustration of an island minimap with a closing storm"
-              className="rounded-panel shadow-[var(--shadow-lift)]"
+            <ConceptImage
+              art={HERO_ART}
+              sizes="(min-width: 1280px) 580px, (min-width: 1024px) 46vw, 100vw"
+              priority
+              onOpen={() => view(HERO_ART)}
+              className="rounded-panel border-line border shadow-[var(--shadow-lift)]"
             />
             <figcaption className="text-subtle mt-3 text-center font-mono text-[0.625rem] tracking-[0.12em] uppercase">
-              Illustration
+              Concept art — rendered scene, not a game screenshot
             </figcaption>
           </figure>
         </Reveal>
@@ -229,6 +309,32 @@ export default function Uefn() {
         </section>
       )}
 
+      {/* ------------------------------------------------------ concept art */}
+      <section className="container-page border-line border-t pt-16 pb-16">
+        <Reveal>
+          <h2 className="text-subtle font-mono text-xs tracking-[0.2em] uppercase">Concept art</h2>
+          <p className="text-muted mt-4 mb-8 max-w-2xl leading-relaxed">
+            Close-ups of the four builds below. These are rendered scenes, not in-game screenshots —
+            select any image to see it full size.
+          </p>
+        </Reveal>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {VERSE_CONCEPTS.map((concept, i) => (
+            <Reveal key={concept.detail.name} delay={Math.min(i * 0.05, 0.2)} className="min-w-0">
+              <figure>
+                <ConceptImage
+                  art={concept.detail}
+                  sizes="(min-width: 1280px) 620px, (min-width: 640px) 50vw, 100vw"
+                  onOpen={() => view(concept.detail)}
+                  className="border-line rounded-2xl border"
+                />
+                <figcaption className="text-muted mt-3 text-sm">{concept.detail.caption}</figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/* ------------------------------------------------- concept builds */}
       <section className="container-page border-line border-t pt-16 pb-24">
         <Reveal>
@@ -237,14 +343,20 @@ export default function Uefn() {
           </h2>
           <p className="text-muted mt-4 mb-8 max-w-2xl leading-relaxed">
             Game systems designed and written in Verse, not yet published as islands. The images
-            are illustrations; the code is real.
+            are concept art and illustrations; the code is real.
           </p>
         </Reveal>
 
         <div className="grid gap-5 lg:grid-cols-2">
           {VERSE_CONCEPTS.map((concept, i) => (
             <Reveal key={concept.slug} delay={Math.min(i * 0.05, 0.2)} className="min-w-0">
-              <ConceptCard {...concept} />
+              <ConceptCard
+                slug={concept.slug}
+                title={concept.title}
+                note={concept.note}
+                art={concept.art}
+                onView={view}
+              />
             </Reveal>
           ))}
         </div>
@@ -257,6 +369,8 @@ export default function Uefn() {
           </div>
         </Reveal>
       </section>
+
+      <Lightbox images={VIEWER_IMAGES} index={viewing} onIndexChange={setViewing} />
     </>
   )
 }
